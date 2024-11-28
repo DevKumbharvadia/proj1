@@ -1,4 +1,4 @@
-﻿namespace TodoAPI.Models
+﻿namespace AppAPI.Models.ResponseModel
 {
     public class ApiResponse<T>
     {

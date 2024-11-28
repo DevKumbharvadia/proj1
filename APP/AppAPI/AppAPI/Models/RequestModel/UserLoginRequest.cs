@@ -1,4 +1,4 @@
-﻿namespace AppAPI.Models.DTO
+﻿namespace AppAPI.Models.RequestModel
 {
     public class UserLoginModelDTO
     {

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AppAPI.Models.DTO
+namespace AppAPI.Models.RequestModel
 {
-    public class ProductUpdateDTO
+    public class ProductUpdateRequst
     {
         [Required]
         public string ProductName { get; set; }

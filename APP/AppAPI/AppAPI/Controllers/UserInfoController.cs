@@ -1,9 +1,9 @@
 ﻿using AppAPI.Data;
-using AppAPI.Models.DTO;
+using AppAPI.Models.ResponseModel;
+using AppAPI.Models.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TodoAPI.Models;
 
 namespace AppAPI.Controllers
 {
@@ -19,12 +19,12 @@ namespace AppAPI.Controllers
         }
 
         [HttpGet("GetAllUserInfo")]
-        public async Task<ActionResult<ApiResponse<List<UserInfoDto>>>> GetAllUsersInfo()
+        public async Task<ActionResult<ApiResponse<List<UserInfoView>>>> GetAllUsersInfo()
         {
             try
             {
                 var users = await _context.Users
-                    .Select(user => new UserInfoDto
+                    .Select(user => new UserInfoView
                     {
                         UserId = user.UserId,
                         Username = user.Username,
@@ -42,14 +42,14 @@ namespace AppAPI.Controllers
 
                 if (!users.Any())
                 {
-                    return NotFound(new ApiResponse<List<UserInfoDto>>
+                    return NotFound(new ApiResponse<List<UserInfoView>>
                     {
                         Message = "No users found.",
                         Success = false
                     });
                 }
 
-                return Ok(new ApiResponse<List<UserInfoDto>>
+                return Ok(new ApiResponse<List<UserInfoView>>
                 {
                     Message = "Users information retrieved successfully",
                     Success = true,
@@ -58,7 +58,7 @@ namespace AppAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse<List<UserInfoDto>>
+                return StatusCode(500, new ApiResponse<List<UserInfoView>>
                 {
                     Message = $"An error occurred while retrieving user info: {ex.Message}",
                     Success = false
@@ -67,13 +67,13 @@ namespace AppAPI.Controllers
         }
 
         [HttpGet("GetUserInfoById")]
-        public async Task<ActionResult<ApiResponse<UserInfoDto>>> GetUserInfoById(Guid id)
+        public async Task<ActionResult<ApiResponse<UserInfoView>>> GetUserInfoById(Guid id)
         {
             try
             {
                 var user = await _context.Users
                     .Where(u => u.UserId == id)
-                    .Select(user => new UserInfoDto
+                    .Select(user => new UserInfoView
                     {
                         UserId = user.UserId,
                         Username = user.Username,
@@ -91,14 +91,14 @@ namespace AppAPI.Controllers
 
                 if (user == null)
                 {
-                    return NotFound(new ApiResponse<UserInfoDto>
+                    return NotFound(new ApiResponse<UserInfoView>
                     {
                         Message = "User not found.",
                         Success = false
                     });
                 }
 
-                return Ok(new ApiResponse<UserInfoDto>
+                return Ok(new ApiResponse<UserInfoView>
                 {
                     Message = "User information retrieved successfully",
                     Success = true,
@@ -107,7 +107,7 @@ namespace AppAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new ApiResponse<UserInfoDto>
+                return StatusCode(500, new ApiResponse<UserInfoView>
                 {
                     Message = $"An error occurred while retrieving user info: {ex.Message}",
                     Success = false

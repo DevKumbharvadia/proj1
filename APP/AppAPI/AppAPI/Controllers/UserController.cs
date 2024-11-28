@@ -8,9 +8,10 @@ using AppAPI.Data;
 using AppAPI.Models;
 using AppAPI.Models.Domain;
 using AppAPI.Models.DTO;
-using TodoAPI.Models;
 using AppAPI.Models.Interface;
 using Microsoft.AspNetCore.Authorization;
+using AppAPI.Models.ResponseModel;
+using AppAPI.Models.RequestModel;
 
 namespace TodoAPI.Controllers
 {
@@ -25,7 +26,7 @@ namespace TodoAPI.Controllers
             _context = context;
         }
 
-        private bool IsUserValid(UserRegisterModelDTO model)
+        private bool IsUserValid(UserRegisteRequest model)
         {
             if (_context.Users.Any(u => u.Username == model.Username))
             {
@@ -46,7 +47,7 @@ namespace TodoAPI.Controllers
         }
 
         [HttpPost("AddUser")]
-        public ActionResult<ApiResponse<User>> AddUser([FromBody] UserRegisterModelDTO model)
+        public ActionResult<ApiResponse<User>> AddUser([FromBody] UserRegisteRequest model)
         {
             try
             {

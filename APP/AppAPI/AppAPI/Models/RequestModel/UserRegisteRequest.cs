@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace AppAPI.Models.DTO
+namespace AppAPI.Models.RequestModel
 {
-    public class UserRegisterModelDTO
+    public class UserRegisteRequest
     {
         public string Username { get; set; }
         public string Password { get; set; }

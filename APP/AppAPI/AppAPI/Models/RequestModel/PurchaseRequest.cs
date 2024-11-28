@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AppAPI.Models.DTO
+namespace AppAPI.Models.RequestModel
 {
-    public class PurchaseDTO
+    public class Purchaserequest
     {
         [Required]
         public Guid ProductId { get; set; }

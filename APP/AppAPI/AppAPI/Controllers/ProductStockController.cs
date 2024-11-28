@@ -1,5 +1,6 @@
 ﻿using AppAPI.Data;
 using AppAPI.Models.Domain;
+using AppAPI.Models.ResponseModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sieve.Services;
@@ -22,10 +23,10 @@ namespace AppAPI.Controllers
             _sieveProcessor = sieveProcessor;
         }
 
-        // Get all stock logs for all products
         [HttpGet("GetAllStockLogs")]
         public async Task<IActionResult> GetAllStockUpdates()
         {
+
             var stockLogs = await _context.ProductStockLogs
                 .Include(sl => sl.Product) // Assuming StockLogs has a reference to Product
                 .ToListAsync();
@@ -48,13 +49,12 @@ namespace AppAPI.Controllers
             });
         }
 
-        // Get a specific stock log by ID
-        [HttpGet("GetStockLogById/{id}")]
+        [HttpGet("GetStockLogByProductId/{id}")]
         public async Task<IActionResult> GetStockUpdateById(Guid id)
         {
             var stockLog = await _context.ProductStockLogs
                 .Include(sl => sl.Product) // Assuming StockLogs has a reference to Product
-                .FirstOrDefaultAsync(sl => sl.StockLogId == id);
+                .FirstOrDefaultAsync(sl => sl.ProductId == id);
 
             if (stockLog == null)
             {
@@ -74,11 +74,10 @@ namespace AppAPI.Controllers
             });
         }
 
-        // Add a stock update (e.g., adding stock or removing stock)
         [HttpPost("AddProductStockLog")]
-        public async Task<IActionResult> AddProductStockUpdate([FromBody] ProductStockUpdateDTO stockUpdateDto)
+        public async Task<IActionResult> AddProductStockUpdate([FromBody] ProductStockAddRequest stockAddRequest)
         {
-            if (stockUpdateDto == null)
+            if (stockAddRequest == null)
             {
                 return Ok(new ApiResponse<object>
                 {
@@ -88,7 +87,7 @@ namespace AppAPI.Controllers
                 });
             }
 
-            var product = await _context.Products.FindAsync(stockUpdateDto.ProductId);
+            var product = await _context.Products.FindAsync(stockAddRequest.ProductId);
             if (product == null)
             {
                 return Ok(new ApiResponse<object>
@@ -101,9 +100,9 @@ namespace AppAPI.Controllers
 
             var stockLog = new ProductStockLog
             {
-                ProductId = stockUpdateDto.ProductId,
-                QuantityChanged = stockUpdateDto.QuantityChanged,
-                NewStockLevel = product.StockQuantity + stockUpdateDto.QuantityChanged, // Assuming you update the stock quantity based on the log
+                ProductId = stockAddRequest.ProductId,
+                QuantityChanged = stockAddRequest.QuantityChanged,
+                NewStockLevel = product.StockQuantity + stockAddRequest.QuantityChanged, // Assuming you update the stock quantity based on the log
                 Timestamp = DateTime.UtcNow
             };
 
@@ -121,9 +120,8 @@ namespace AppAPI.Controllers
             });
         }
 
-        // Update an existing stock log (if needed)
         [HttpPut("UpdateProductStockLog/{id}")]
-        public async Task<IActionResult> UpdateProductStockUpdate(Guid id, [FromBody] ProductStockUpdateDTO stockUpdateDto)
+        public async Task<IActionResult> UpdateProductStockUpdate(Guid id, [FromBody] ProductStockAddRequest stockUpdateDto)
         {
             var stockLog = await _context.ProductStockLogs.FindAsync(id);
             if (stockLog == null)
@@ -166,7 +164,6 @@ namespace AppAPI.Controllers
             });
         }
 
-        // Delete a stock log
         [HttpDelete("DeleteProductStockLog/{id}")]
         public async Task<IActionResult> DeleteProductStockUpdate(Guid id)
         {

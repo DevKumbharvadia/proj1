@@ -8,10 +8,10 @@ using System.Text;
 using AppAPI.Data;
 using AppAPI.Models;
 using AppAPI.Models.Domain;
-using TodoAPI.Models;
 using AppAPI.Models.Interface;
-using AppAPI.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
+using AppAPI.Models.RequestModel;
+using AppAPI.Models.ResponseModel;
 
 namespace TodoAPI.Controllers
 {
@@ -29,7 +29,7 @@ namespace TodoAPI.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult<ApiResponse<User>>> Register([FromBody] UserRegisterModelDTO model)
+        public async Task<ActionResult<ApiResponse<User>>> Register([FromBody] UserRegisteRequest model)
         {
             if (_context.Users.Any(u => u.Username == model.Username))
             {

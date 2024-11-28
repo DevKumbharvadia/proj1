@@ -207,7 +207,7 @@ namespace AppAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TransactionHistories",
+                name: "Transactions",
                 columns: table => new
                 {
                     TransactionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -216,26 +216,27 @@ namespace AppAPI.Migrations
                     SellerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     TotalAmount = table.Column<double>(type: "float", nullable: false),
+                    ShipingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OrderStatus = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TransactionHistories", x => x.TransactionId);
+                    table.PrimaryKey("PK_Transactions", x => x.TransactionId);
                     table.ForeignKey(
-                        name: "FK_TransactionHistories_Products_ProductId",
+                        name: "FK_Transactions_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_TransactionHistories_Users_BuyerId",
+                        name: "FK_Transactions_Users_BuyerId",
                         column: x => x.BuyerId,
                         principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_TransactionHistories_Users_SellerId",
+                        name: "FK_Transactions_Users_SellerId",
                         column: x => x.SellerId,
                         principalTable: "Users",
                         principalColumn: "UserId",
@@ -293,18 +294,18 @@ namespace AppAPI.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TransactionHistories_BuyerId",
-                table: "TransactionHistories",
+                name: "IX_Transactions_BuyerId",
+                table: "Transactions",
                 column: "BuyerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TransactionHistories_ProductId",
-                table: "TransactionHistories",
+                name: "IX_Transactions_ProductId",
+                table: "Transactions",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TransactionHistories_SellerId",
-                table: "TransactionHistories",
+                name: "IX_Transactions_SellerId",
+                table: "Transactions",
                 column: "SellerId");
 
             migrationBuilder.CreateIndex(
@@ -342,7 +343,7 @@ namespace AppAPI.Migrations
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
-                name: "TransactionHistories");
+                name: "Transactions");
 
             migrationBuilder.DropTable(
                 name: "UserActions");

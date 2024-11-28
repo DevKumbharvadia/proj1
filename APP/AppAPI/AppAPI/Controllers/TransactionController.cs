@@ -1,6 +1,8 @@
 ﻿using AppAPI.Data;
 using AppAPI.Models.Domain;
-using AppAPI.Models.DTO;
+using AppAPI.Models.RequestModel;
+using AppAPI.Models.ResponseModel;
+using AppAPI.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +53,7 @@ namespace AppAPI.Controllers
                 t.Quantity,
                 t.TransactionDate,
                 t.TotalAmount,
+                t.ShipingStatus,
                 ProductName = t.Product.ProductName,
                 Buyer = new { t.Buyer.UserId, t.Buyer.Username },
                 Seller = new { t.Seller.UserId, t.Seller.Username }
@@ -104,7 +107,7 @@ namespace AppAPI.Controllers
         }
 
         [HttpPost("MakePurchase")]
-        public async Task<IActionResult> MakePurchase(PurchaseDTO purchase)
+        public async Task<IActionResult> MakePurchase(Purchaserequest purchase)
         {
             if (purchase == null)
                 return BadRequest(new ApiResponse<object> { Success = false, Message = "Purchase details are required." });
@@ -143,6 +146,7 @@ namespace AppAPI.Controllers
                 Quantity = purchase.Quantity,
                 TotalAmount = totalAmount,
                 TransactionDate = DateTime.UtcNow,
+                ShipingStatus = false,
                 Product = product,
                 Buyer = buyer,
                 Seller = seller
@@ -197,7 +201,8 @@ namespace AppAPI.Controllers
                     t.ProductId,
                     t.Quantity,
                     t.TransactionDate,
-                    t.TotalAmount
+                    t.TotalAmount,
+                    t.ShipingStatus
                 })
                 .ToListAsync();
 
@@ -216,7 +221,8 @@ namespace AppAPI.Controllers
                         ProductName = product.ProductName,
                         Quantity = transaction.Quantity,
                         TransactionDate = transaction.TransactionDate,
-                        TotalAmount = transaction.TotalAmount
+                        TotalAmount = transaction.TotalAmount,
+                        ShipingStatus = transaction.ShipingStatus
                     });
                 }
             }

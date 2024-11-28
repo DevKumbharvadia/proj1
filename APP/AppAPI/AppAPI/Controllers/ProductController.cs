@@ -1,6 +1,8 @@
 ﻿using AppAPI.Data;
 using AppAPI.Models.Domain;
 using AppAPI.Models.DTO;
+using AppAPI.Models.RequestModel;
+using AppAPI.Models.ResponseModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sieve.Services;
@@ -130,7 +132,7 @@ namespace AppAPI.Controllers
         }
 
         [HttpPut("UpdateProduct")]
-        public async Task<IActionResult> UpdateProduct(Guid id, [FromForm] ProductUpdateDTO productDto)
+        public async Task<IActionResult> UpdateProduct(Guid id, [FromForm] ProductUpdateRequst productDto)
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null)

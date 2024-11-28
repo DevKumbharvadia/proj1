@@ -1,5 +1,8 @@
 ﻿using AppAPI.Data;
 using AppAPI.Models.DTOs;
+using AppAPI.Models.RequestModel;
+using AppAPI.Models.ResponseModel;
+using AppAPI.Models.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +37,7 @@ namespace AppAPI.Controllers
             var salesData = await _context.Transactions
                 .Include(th => th.Product)
                 .GroupBy(th => th.Product.SellerId)
-                .Select(group => new SalesForAllSellersDTO
+                .Select(group => new SalesForAllSellersView
                 {
                     SellerId = group.Key,
                     TotalAmountSold = group.Sum(th => th.TotalAmount),
@@ -74,7 +77,7 @@ namespace AppAPI.Controllers
         {
             var salesData = await _context.Users
                 .Where(u => u.UserId == sellerId)
-                .Select(user => new SalesBySellerDTO
+                .Select(user => new SalesBySellerView
                 {
                     SellerId = user.UserId,
                     Username = user.Username,
@@ -121,6 +124,35 @@ namespace AppAPI.Controllers
                 Success = true,
                 Message = "Sales data retrieved successfully",
                 Data = salesData
+            });
+        }
+
+        [HttpPost("ShipOrders")]
+        public async Task<IActionResult> ShipOrders([FromForm] ShipOrderRequest shipOrderRequest)
+        {
+            foreach (var transactionId in shipOrderRequest.TransactionId)
+            {
+                var transaction = await _context.Transactions
+                                                 .FirstOrDefaultAsync(t => t.TransactionId == transactionId);
+
+                if (transaction == null)
+                {
+                    return NotFound($"Transaction with ID {transactionId} not found.");
+                }
+
+                transaction.ShipingStatus = true;
+                transaction.ShipingDate = DateTime.UtcNow;
+
+                _context.Transactions.Update(transaction);
+            }
+
+            _context.SaveChanges();
+
+            return Ok(new ApiResponse<object>
+            {
+                Message = "Products Shipped Sucessfully",
+                Success = true, 
+                Data = null
             });
         }
     }

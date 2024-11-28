@@ -1,5 +1,6 @@
 ﻿using AppAPI.Data;
 using AppAPI.Models.Domain;
+using AppAPI.Models.ResponseModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

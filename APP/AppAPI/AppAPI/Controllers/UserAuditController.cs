@@ -1,5 +1,6 @@
 ﻿using AppAPI.Data;
 using AppAPI.Models.DTO;
+using AppAPI.Models.ResponseModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

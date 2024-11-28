@@ -1,6 +1,8 @@
-﻿namespace AppAPI.Models.DTOs
+﻿using AppAPI.Models.DTOs;
+
+namespace AppAPI.Models.ViewModel
 {
-    public class SalesBySellerDTO
+    public class SalesBySellerView
     {
         public Guid SellerId { get; set; }
         public string Username { get; set; }

@@ -1,6 +1,6 @@
-﻿namespace AppAPI.Models.DTO
+﻿namespace AppAPI.Models.ViewModel
 {
-    public class UserInfoDto
+    public class UserInfoView
     {
         public Guid UserId { get; set; }
         public string Username { get; set; }

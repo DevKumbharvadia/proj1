@@ -1,10 +1,10 @@
 ﻿using AppAPI.Data;
 using AppAPI.Models.Domain;
-using AppAPI.Models.DTO;
+using AppAPI.Models.ResponseModel;
+using AppAPI.Models.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TodoAPI.Models;
 
 namespace TodoAPI.Controllers
 {
@@ -102,11 +102,11 @@ namespace TodoAPI.Controllers
         }
 
         [HttpGet("GetAllWhiteListedUserInfo")]
-        public async Task<ActionResult<ApiResponse<List<UserInfoDto>>>> GetAllUsersInfo()
+        public async Task<ActionResult<ApiResponse<List<UserInfoView>>>> GetAllUsersInfo()
         {
             var users = await _context.Users
                 .Where(user => !_context.BlacklistedUsers.Any(blacklisted => blacklisted.UserId == user.UserId))
-                .Select(user => new UserInfoDto
+                .Select(user => new UserInfoView
                 {
                     UserId = user.UserId,
                     Username = user.Username,
@@ -122,7 +122,7 @@ namespace TodoAPI.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(new ApiResponse<List<UserInfoDto>>
+            return Ok(new ApiResponse<List<UserInfoView>>
             {
                 Message = "White-listed user info retrieved successfully.",
                 Success = true,

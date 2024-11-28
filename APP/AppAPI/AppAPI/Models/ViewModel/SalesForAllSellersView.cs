@@ -1,6 +1,8 @@
-﻿namespace AppAPI.Models.DTOs
+﻿using AppAPI.Models.DTOs;
+
+namespace AppAPI.Models.ViewModel
 {
-    public class SalesForAllSellersDTO
+    public class SalesForAllSellersView
     {
         public Guid SellerId { get; set; }
         public double TotalAmountSold { get; set; }

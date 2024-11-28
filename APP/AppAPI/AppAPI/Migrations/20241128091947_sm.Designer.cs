@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241128055156_fm")]
-    partial class fm
+    [Migration("20241128091947_sm")]
+    partial class sm
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -203,9 +203,6 @@ namespace AppAPI.Migrations
                     b.Property<Guid>("BuyerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("OrderStatus")
-                        .HasColumnType("bit");
-
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
@@ -214,6 +211,12 @@ namespace AppAPI.Migrations
 
                     b.Property<Guid>("SellerId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ShipingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("ShipingStatus")
+                        .HasColumnType("bit");
 
                     b.Property<double>("TotalAmount")
                         .HasColumnType("float");
@@ -229,7 +232,7 @@ namespace AppAPI.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("TransactionHistories");
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("AppAPI.Models.Domain.User", b =>
