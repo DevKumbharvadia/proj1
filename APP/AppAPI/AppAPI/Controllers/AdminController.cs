@@ -4,6 +4,7 @@ using AppAPI.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TodoAPI.Models;
 
 namespace TodoAPI.Controllers
 {
@@ -20,13 +21,18 @@ namespace TodoAPI.Controllers
             _config = config;
         }
 
-        [HttpPost("RewriteRoles")] //ok
-        public async Task<ActionResult> RewriteRoles(Guid userId, List<Guid> roleIds)
+        [HttpPost("RewriteRoles")]
+        public async Task<ActionResult<ApiResponse<UserAction>>> RewriteRoles(Guid userId, List<Guid> roleIds)
         {
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
-                return NotFound($"User with ID {userId} does not exist.");
+                return NotFound(new ApiResponse<UserAction>
+                {
+                    Message = $"User with ID {userId} does not exist.",
+                    Success = false,
+                    Data = null
+                });
             }
 
             var existingUserRoles = _context.UserRoles.Where(ur => ur.UserId == userId).ToList();
@@ -44,7 +50,12 @@ namespace TodoAPI.Controllers
                 var role = await _context.Roles.FindAsync(roleId);
                 if (role == null)
                 {
-                    return BadRequest($"Role with ID {roleId} does not exist.");
+                    return BadRequest(new ApiResponse<UserAction>
+                    {
+                        Message = $"Role with ID {roleId} does not exist.",
+                        Success = false,
+                        Data = null
+                    });
                 }
 
                 var userRoleExist = existingUserRoles.SingleOrDefault(ur => ur.RoleId == roleId);
@@ -56,94 +67,42 @@ namespace TodoAPI.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(new { Message = "User roles updated successfully." });
+            return Ok(new ApiResponse<UserAction>
+            {
+                Message = "User roles updated successfully.",
+                Success = true,
+                Data = null  // No specific data to return
+            });
         }
 
-        [HttpDelete("DeleteUser")] //ok
-        public async Task<ActionResult<User>> DeleteUser(Guid id)
+        [HttpPost("BlacklistUser")]
+        public async Task<ActionResult<ApiResponse<UserAction>>> BlacklistUser(Guid id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
             {
-                return NotFound($"User with ID {id} not found.");
-            }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-            return Ok(user);
-        }
-
-        [HttpPost("BlacklistUser")] //ok
-        public async Task<ActionResult<User>> BlacklistUser(Guid id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound($"User with ID {id} not found.");
+                return NotFound(new ApiResponse<UserAction>
+                {
+                    Message = $"User with ID {id} not found.",
+                    Success = false,
+                    Data = null
+                });
             }
 
             _context.BlacklistedUsers.Add(new BlacklistedUser { Id = Guid.NewGuid(), UserId = id });
 
             await _context.SaveChangesAsync();
-            return Ok(user);
+
+            return Ok(new ApiResponse<UserAction>
+            {
+                Message = "User blacklisted successfully.",
+                Success = true,
+                Data = null  // No specific data to return
+            });
         }
 
-        [HttpGet("GetAllAudits")] //ok
-        public IActionResult GetUserAudits()
-        {
-            try
-            {
-                var audits = _context.UserAudits
-                    .Include(a => a.User)
-                    .Select(a => new AuditWithUserDTO
-                    {
-                        UserAuditId = a.UserAuditId,
-                        UserId = a.UserId,
-                        Username = a.User!.Username,
-                        LoginTime = a.LoginTime,
-                        LogoutTime = a.LogoutTime
-                    })
-                    .ToList();
-
-                if (!audits.Any())
-                {
-                    return NotFound("No audits found.");
-                }
-
-                return Ok(audits);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error occurred: {ex.Message}");
-                return StatusCode(500, "Internal server error.");
-            }
-        }
-
-        [HttpGet("GetAuditsByUserID")] //ok
-        public async Task<IActionResult> GetUserAuditsByUserId(Guid userId)
-        {
-            try
-            {
-                var audits = await _context.UserAudits
-                    .Where(a => a.UserId == userId)
-                    .ToListAsync();
-
-                if (!audits.Any())
-                {
-                    return NotFound($"No audits found for user with ID: {userId}");
-                }
-
-                return Ok(audits);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error occurred: {ex.Message}");
-                return StatusCode(500, "Internal server error.");
-            }
-        }
-
-        [HttpGet("GetAllWhiteListedUserInfo")] //ok
-        public async Task<ActionResult<IEnumerable<UserInfoDto>>> GetAllUsersInfo()
+        [HttpGet("GetAllWhiteListedUserInfo")]
+        public async Task<ActionResult<ApiResponse<List<UserInfoDto>>>> GetAllUsersInfo()
         {
             var users = await _context.Users
                 .Where(user => !_context.BlacklistedUsers.Any(blacklisted => blacklisted.UserId == user.UserId))
@@ -163,8 +122,12 @@ namespace TodoAPI.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(users);
+            return Ok(new ApiResponse<List<UserInfoDto>>
+            {
+                Message = "White-listed user info retrieved successfully.",
+                Success = true,
+                Data = users
+            });
         }
-
     }
 }

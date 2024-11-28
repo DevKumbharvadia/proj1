@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppAPI.Models.Domain
 {
@@ -8,15 +10,16 @@ namespace AppAPI.Models.Domain
         public Guid UserActionId { get; set; } // Primary Key
 
         [Required]
-        public Guid ActionLogId { get; set; } // Foreign Key to UserActionLog
+        public Guid UserAuditId { get; set; } // Foreign Key to UserAudit
 
         [Required]
-        public Guid ActionId { get; set; } // Foreign Key to Action
+        [MaxLength(50)]
+        public string Action { get; set; } = null!; // Action name (e.g., "Create", "Delete")
 
         [Required]
-        public UserActionLog UserActionLog { get; set; } = null!; // Navigation property to UserActionLog
+        public DateTime TimeOfAction { get; set; } = DateTime.UtcNow; // UTC timestamp of the action
 
-        [Required]
-        public Action Action { get; set; } = null!; // Navigation property to Action
+        [ForeignKey(nameof(UserAuditId))]
+        public UserAudit UserAudit { get; set; } = null!; // Navigation property to UserAudit
     }
 }

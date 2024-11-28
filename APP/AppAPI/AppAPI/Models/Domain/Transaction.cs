@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppAPI.Models.Domain
 {
-    public class TransactionHistory
+    public class Transaction
     {
         [Key]
         public Guid TransactionId { get; set; } // Primary Key

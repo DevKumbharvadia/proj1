@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241127134435_fm")]
+    [Migration("20241128055156_fm")]
     partial class fm
     {
         /// <inheritdoc />
@@ -125,6 +125,31 @@ namespace AppAPI.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("AppAPI.Models.Domain.ProductStockLog", b =>
+                {
+                    b.Property<Guid>("StockLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("NewStockLevel")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("QuantityChanged")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("StockLogId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductStockLogs");
+                });
+
             modelBuilder.Entity("AppAPI.Models.Domain.RefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
@@ -169,7 +194,7 @@ namespace AppAPI.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("AppAPI.Models.Domain.TransactionHistory", b =>
+            modelBuilder.Entity("AppAPI.Models.Domain.Transaction", b =>
                 {
                     b.Property<Guid>("TransactionId")
                         .ValueGeneratedOnAdd()
@@ -232,41 +257,26 @@ namespace AppAPI.Migrations
 
             modelBuilder.Entity("AppAPI.Models.Domain.UserAction", b =>
                 {
-                    b.Property<Guid>("ActionId")
+                    b.Property<Guid>("UserActionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ActionType")
+                    b.Property<string>("Action")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("ActionId");
-
-                    b.ToTable("UserActions");
-                });
-
-            modelBuilder.Entity("AppAPI.Models.Domain.UserActionLog", b =>
-                {
-                    b.Property<Guid>("ActionLogId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ActionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ActionTimestamp")
+                    b.Property<DateTime>("TimeOfAction")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("UserAuditId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ActionLogId");
-
-                    b.HasIndex("ActionId");
+                    b.HasKey("UserActionId");
 
                     b.HasIndex("UserAuditId");
 
-                    b.ToTable("UserActionLogs");
+                    b.ToTable("UserActions");
                 });
 
             modelBuilder.Entity("AppAPI.Models.Domain.UserAudit", b =>
@@ -307,31 +317,6 @@ namespace AppAPI.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRoles");
-                });
-
-            modelBuilder.Entity("AppAPI.Models.NewDomain.ProductStockLog", b =>
-                {
-                    b.Property<Guid>("StockLogId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("NewStockLevel")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("QuantityChanged")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("StockLogId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductStockLogs");
                 });
 
             modelBuilder.Entity("AppAPI.Models.Domain.BlacklistedUser", b =>
@@ -378,6 +363,17 @@ namespace AppAPI.Migrations
                     b.Navigation("Seller");
                 });
 
+            modelBuilder.Entity("AppAPI.Models.Domain.ProductStockLog", b =>
+                {
+                    b.HasOne("AppAPI.Models.Domain.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("AppAPI.Models.Domain.RefreshToken", b =>
                 {
                     b.HasOne("AppAPI.Models.Domain.User", "User")
@@ -389,7 +385,7 @@ namespace AppAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AppAPI.Models.Domain.TransactionHistory", b =>
+            modelBuilder.Entity("AppAPI.Models.Domain.Transaction", b =>
                 {
                     b.HasOne("AppAPI.Models.Domain.User", "Buyer")
                         .WithMany("Transactions")
@@ -416,21 +412,13 @@ namespace AppAPI.Migrations
                     b.Navigation("Seller");
                 });
 
-            modelBuilder.Entity("AppAPI.Models.Domain.UserActionLog", b =>
+            modelBuilder.Entity("AppAPI.Models.Domain.UserAction", b =>
                 {
-                    b.HasOne("AppAPI.Models.Domain.UserAction", "Action")
-                        .WithMany("UserActionLogs")
-                        .HasForeignKey("ActionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("AppAPI.Models.Domain.UserAudit", "UserAudit")
-                        .WithMany("UserActionLogs")
+                        .WithMany()
                         .HasForeignKey("UserAuditId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Action");
 
                     b.Navigation("UserAudit");
                 });
@@ -465,17 +453,6 @@ namespace AppAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AppAPI.Models.NewDomain.ProductStockLog", b =>
-                {
-                    b.HasOne("AppAPI.Models.Domain.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("AppAPI.Models.Domain.Product", b =>
                 {
                     b.Navigation("Transactions");
@@ -497,16 +474,6 @@ namespace AppAPI.Migrations
                     b.Navigation("UserAudits");
 
                     b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("AppAPI.Models.Domain.UserAction", b =>
-                {
-                    b.Navigation("UserActionLogs");
-                });
-
-            modelBuilder.Entity("AppAPI.Models.Domain.UserAudit", b =>
-                {
-                    b.Navigation("UserActionLogs");
                 });
 #pragma warning restore 612, 618
         }

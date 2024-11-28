@@ -5,28 +5,28 @@ namespace AppAPI.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
+        #region DbSets
         public DbSet<Product> Products { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<TransactionHistory> TransactionHistories { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserAudit> UserAudits { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<DeletedProduct> DeletedProducts { get; set; }
         public DbSet<BlacklistedUser> BlacklistedUsers { get; set; }
-        public DbSet<Models.Domain.Action> UserActions { get; set; }
-        public DbSet<UserActionLog> UserActionLogs { get; set; }
+        public DbSet<UserAction> UserActions { get; set; }
         public DbSet<BuyerInfo> BuyerInfos { get; set; }
         public DbSet<ProductStockLog> ProductStockLogs { get; set; }
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            #region User Configuration
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Products)
                 .WithOne(p => p.Seller)
@@ -47,28 +47,32 @@ namespace AppAPI.Data
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Transactions)
-                .WithOne()
+                .WithOne(t => t.Buyer)
                 .HasForeignKey(t => t.BuyerId)
                 .OnDelete(DeleteBehavior.Restrict);
+            #endregion
 
-            modelBuilder.Entity<TransactionHistory>()
+            #region Transaction Configuration
+            modelBuilder.Entity<Transaction>()
                 .HasOne(t => t.Product)
                 .WithMany(p => p.Transactions)
                 .HasForeignKey(t => t.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<TransactionHistory>()
+            modelBuilder.Entity<Transaction>()
                 .HasOne(t => t.Buyer)
                 .WithMany(u => u.Transactions)
                 .HasForeignKey(t => t.BuyerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<TransactionHistory>()
+            modelBuilder.Entity<Transaction>()
                 .HasOne(t => t.Seller)
                 .WithMany()
                 .HasForeignKey(t => t.SellerId)
                 .OnDelete(DeleteBehavior.Restrict);
+            #endregion
 
+            #region UserRole Configuration
             modelBuilder.Entity<UserRole>()
                 .HasKey(ur => new { ur.UserId, ur.RoleId });
 
@@ -83,7 +87,9 @@ namespace AppAPI.Data
                 .WithMany(r => r.UserRoles)
                 .HasForeignKey(ur => ur.RoleId)
                 .OnDelete(DeleteBehavior.Restrict);
+            #endregion
 
+            #region Product Configuration
             modelBuilder.Entity<Product>()
                 .Property(p => p.StockQuantity)
                 .HasDefaultValue(0);
@@ -95,48 +101,55 @@ namespace AppAPI.Data
             modelBuilder.Entity<Product>()
                 .Property(p => p.UpdatedAt)
                 .HasDefaultValueSql("GETUTCDATE()");
+            #endregion
 
+            #region BlacklistedUser Configuration
             modelBuilder.Entity<BlacklistedUser>()
                 .HasOne(b => b.User)
                 .WithMany()
                 .HasForeignKey(b => b.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+            #endregion
 
+            #region DeletedProduct Configuration
             modelBuilder.Entity<DeletedProduct>()
                 .HasOne(d => d.Product)
                 .WithMany()
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+            #endregion
 
-            modelBuilder.Entity<UserActionLog>()
-                .HasOne(ual => ual.Action)
-                .WithMany(a => a.UserActionLogs)
-                .HasForeignKey(ual => ual.ActionId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<UserActionLog>()
-                .HasOne(ual => ual.UserAudit)
-                .WithMany(ua => ua.UserActionLogs)
-                .HasForeignKey(ual => ual.UserAuditId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<UserAudit>()
-                .HasOne(ua => ua.User)
-                .WithMany(u => u.UserAudits)
-                .HasForeignKey(ua => ua.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
+            #region BuyerInfo Configuration
             modelBuilder.Entity<BuyerInfo>()
                 .HasOne(b => b.User)
                 .WithMany()
                 .HasForeignKey(b => b.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+            #endregion
 
+            #region ProductStockLog Configuration
             modelBuilder.Entity<ProductStockLog>()
                 .HasOne(psl => psl.Product)
                 .WithMany()
                 .HasForeignKey(psl => psl.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+            #endregion
+
+            #region UserAudit Configuration
+            modelBuilder.Entity<UserAudit>()
+               .HasOne(ua => ua.User)
+               .WithMany(u => u.UserAudits)
+               .HasForeignKey(ua => ua.UserId)
+               .OnDelete(DeleteBehavior.Restrict);
+            #endregion
+
+            #region UserAction Configuration
+            modelBuilder.Entity<UserAction>()
+               .HasOne(ua => ua.UserAudit)
+               .WithMany()
+               .HasForeignKey(ua => ua.UserAuditId)
+               .OnDelete(DeleteBehavior.Restrict);
+            #endregion
         }
     }
 }

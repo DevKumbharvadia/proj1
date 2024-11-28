@@ -11,13 +11,14 @@ namespace AppAPI.Configurations
                   .CanFilter()
                   .CanSort();
 
-            // Other properties
             mapper.Property<Product>(p => p.Description)
                   .CanFilter()
                   .CanSort();
+
             mapper.Property<Product>(p => p.Price)
                   .CanFilter()
                   .CanSort();
+
             mapper.Property<Product>(p => p.CreatedAt)
                   .CanFilter()
                   .CanSort();

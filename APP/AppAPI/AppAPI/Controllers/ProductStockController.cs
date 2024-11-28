@@ -1,9 +1,9 @@
 ﻿using AppAPI.Data;
 using AppAPI.Models.Domain;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sieve.Services;
+using TodoAPI.Models; // Assuming ApiResponse<T> is here
 
 namespace AppAPI.Controllers
 {
@@ -22,144 +22,231 @@ namespace AppAPI.Controllers
             _sieveProcessor = sieveProcessor;
         }
 
-        // CRUD for Product
-
-        // GET: api/Products
-        [HttpGet("Get")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        // Get all stock logs for all products
+        [HttpGet("GetAllStockLogs")]
+        public async Task<IActionResult> GetAllStockUpdates()
         {
-            return await _context.Products
-                .Include(p => p.Seller)
-                .Include(p => p.Transactions)
+            var stockLogs = await _context.ProductStockLogs
+                .Include(sl => sl.Product) // Assuming StockLogs has a reference to Product
                 .ToListAsync();
-        }
 
-        // GET: api/Products/{id}
-        [HttpGet("GetById")]
-        public async Task<ActionResult<Product>> GetProduct(Guid id)
-        {
-            var product = await _context.Products
-                .Include(p => p.Seller)
-                .Include(p => p.Transactions)
-                .FirstOrDefaultAsync(p => p.ProductId == id);
-
-            if (product == null)
+            if (stockLogs == null || !stockLogs.Any())
             {
-                return NotFound();
-            }
-
-            return product;
-        }
-
-        // POST: api/Products
-        [HttpPost("Add")]
-        public async Task<ActionResult<Product>> CreateProduct(Product product)
-        {
-            product.CreatedAt = DateTime.UtcNow;
-            product.UpdatedAt = DateTime.UtcNow;
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetProduct), new { id = product.ProductId }, product);
-        }
-
-        // PUT: api/Products/{id}
-        [HttpPut("Update")]
-        public async Task<IActionResult> UpdateProduct(Guid id, Product product)
-        {
-            if (id != product.ProductId)
-            {
-                return BadRequest();
-            }
-
-            product.UpdatedAt = DateTime.UtcNow;
-            _context.Entry(product).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(id))
+                return Ok(new ApiResponse<object>
                 {
-                    return NotFound();
-                }
-                throw;
+                    Success = false,
+                    Message = "No stock logs found.",
+                    Data = null
+                });
             }
 
-            return NoContent();
-        }
-
-        // DELETE: api/Products/{id}
-        [HttpDelete("Delete")]
-        public async Task<IActionResult> DeleteProduct(Guid id)
-        {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            return Ok(new ApiResponse<object>
             {
-                return NotFound();
-            }
-
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+                Success = true,
+                Message = "Stock logs retrieved successfully.",
+                Data = stockLogs
+            });
         }
 
-        // CRUD for ProductStockLog
-
-        // GET: api/Products/StockLogs
-        [HttpGet("StockLogs")]
-        public async Task<ActionResult<IEnumerable<ProductStockLog>>> GetProductStockLogs()
-        {
-            return await _context.ProductStockLogs
-                .Include(sl => sl.Product)
-                .ToListAsync();
-        }
-
-        // GET: api/Products/StockLogs/{id}
-        [HttpGet("StockLogById")]
-        public async Task<ActionResult<ProductStockLog>> GetProductStockLog(Guid id)
+        // Get a specific stock log by ID
+        [HttpGet("GetStockLogById/{id}")]
+        public async Task<IActionResult> GetStockUpdateById(Guid id)
         {
             var stockLog = await _context.ProductStockLogs
-                .Include(sl => sl.Product)
+                .Include(sl => sl.Product) // Assuming StockLogs has a reference to Product
                 .FirstOrDefaultAsync(sl => sl.StockLogId == id);
 
             if (stockLog == null)
             {
-                return NotFound();
+                return Ok(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Stock log not found.",
+                    Data = null
+                });
             }
 
-            return stockLog;
+            return Ok(new ApiResponse<object>
+            {
+                Success = true,
+                Message = "Stock log retrieved successfully.",
+                Data = stockLog
+            });
         }
 
-        // POST: api/Products/StockLogs
-        [HttpPost("AddStockLogs")]
-        public async Task<ActionResult<ProductStockLog>> CreateProductStockLog(ProductStockLog stockLog)
+        // Add a stock update (e.g., adding stock or removing stock)
+        [HttpPost("AddProductStockLog")]
+        public async Task<IActionResult> AddProductStockUpdate([FromBody] ProductStockUpdateDTO stockUpdateDto)
         {
-            // Validate product exists
+            if (stockUpdateDto == null)
+            {
+                return Ok(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Invalid stock update data.",
+                    Data = null
+                });
+            }
+
+            var product = await _context.Products.FindAsync(stockUpdateDto.ProductId);
+            if (product == null)
+            {
+                return Ok(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Product not found.",
+                    Data = null
+                });
+            }
+
+            var stockLog = new ProductStockLog
+            {
+                ProductId = stockUpdateDto.ProductId,
+                QuantityChanged = stockUpdateDto.QuantityChanged,
+                NewStockLevel = product.StockQuantity + stockUpdateDto.QuantityChanged, // Assuming you update the stock quantity based on the log
+                Timestamp = DateTime.UtcNow
+            };
+
+            product.StockQuantity = stockLog.NewStockLevel;
+
+            _context.ProductStockLogs.Add(stockLog);
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+
+            return Ok(new ApiResponse<object>
+            {
+                Success = true,
+                Message = "Stock log added successfully.",
+                Data = stockLog
+            });
+        }
+
+        // Update an existing stock log (if needed)
+        [HttpPut("UpdateProductStockLog/{id}")]
+        public async Task<IActionResult> UpdateProductStockUpdate(Guid id, [FromBody] ProductStockUpdateDTO stockUpdateDto)
+        {
+            var stockLog = await _context.ProductStockLogs.FindAsync(id);
+            if (stockLog == null)
+            {
+                return Ok(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Stock log not found.",
+                    Data = null
+                });
+            }
+
             var product = await _context.Products.FindAsync(stockLog.ProductId);
             if (product == null)
             {
-                return NotFound(new { Message = "Product not found" });
+                return Ok(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Product not found.",
+                    Data = null
+                });
             }
 
-            // Update stock level and add stock log
-            product.StockQuantity += stockLog.QuantityChanged;
-            stockLog.NewStockLevel = product.StockQuantity;
-            _context.ProductStockLogs.Add(stockLog);
-            _context.Entry(product).State = EntityState.Modified;
+            // Updating the stock log and product stock quantity
+            stockLog.QuantityChanged = stockUpdateDto.QuantityChanged;
+            stockLog.NewStockLevel = product.StockQuantity + stockUpdateDto.QuantityChanged;
+            stockLog.Timestamp = DateTime.UtcNow;
 
+            product.StockQuantity = stockLog.NewStockLevel;
+
+            _context.ProductStockLogs.Update(stockLog);
+            _context.Products.Update(product);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetProductStockLog), new { id = stockLog.StockLogId }, stockLog);
+            return Ok(new ApiResponse<object>
+            {
+                Success = true,
+                Message = "Stock log updated successfully.",
+                Data = stockLog
+            });
         }
 
-        // Helper method to check if a product exists
-        private bool ProductExists(Guid id)
+        // Delete a stock log
+        [HttpDelete("DeleteProductStockLog/{id}")]
+        public async Task<IActionResult> DeleteProductStockUpdate(Guid id)
         {
-            return _context.Products.Any(p => p.ProductId == id);
+            var stockLog = await _context.ProductStockLogs.FindAsync(id);
+            if (stockLog == null)
+            {
+                return Ok(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Stock log not found.",
+                    Data = null
+                });
+            }
+
+            _context.ProductStockLogs.Remove(stockLog);
+            await _context.SaveChangesAsync();
+
+            return Ok(new ApiResponse<object>
+            {
+                Success = true,
+                Message = "Stock log deleted successfully.",
+                Data = null
+            });
         }
     }
 }
+
+
+//using AppAPI.Data;
+//using AppAPI.Models.Domain;
+//using Microsoft.AspNetCore.Http;
+//using Microsoft.AspNetCore.Mvc;
+//using Microsoft.EntityFrameworkCore;
+//using Sieve.Services;
+
+//namespace AppAPI.Controllers
+//{
+//    [Route("api/[controller]")]
+//    [ApiController]
+//    public class ProductStockController : ControllerBase //ok
+//    {
+//        private readonly ApplicationDbContext _context;
+//        private readonly IWebHostEnvironment _environment;
+//        private readonly SieveProcessor _sieveProcessor;
+
+//        public ProductStockController(ApplicationDbContext context, IWebHostEnvironment environment, SieveProcessor sieveProcessor)
+//        {
+//            _context = context;
+//            _environment = environment;
+//            _sieveProcessor = sieveProcessor;
+//        }
+
+//        [HttpGet("GetAllStockLogs")]
+//        public async Task<ActionResult<IEnumerable<Product>>> GetAllStockUpdates()
+//        {
+//            return Ok();
+//        }
+
+//        [HttpGet("GetStockLogById")]
+//        public async Task<ActionResult<Product>> GetStockUpdateById(Guid id)
+//        {
+//            return Ok();
+//        }
+
+//        [HttpPost("AddProductStockLog")]
+//        public async Task<ActionResult<Product>> AddProductStockUpdate(Product product)
+//        {
+//            return Ok();
+//        }
+
+//        //[HttpPut("UpdateProductStockLog")]
+//        //public async Task<IActionResult> UpdateProductStockUpdate(Guid id, Product product)
+//        //{
+//        //    return Ok();
+//        //}
+
+//        //[HttpDelete("DeleteProductStockLog")]
+//        //public async Task<IActionResult> DeleteProductStockUpdate(Guid id)
+//        //{
+//        //    return Ok();
+//        //}
+//    }
+//}

@@ -24,18 +24,6 @@ namespace AppAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserActions",
-                columns: table => new
-                {
-                    ActionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ActionType = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserActions", x => x.ActionId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -255,25 +243,19 @@ namespace AppAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserActionLogs",
+                name: "UserActions",
                 columns: table => new
                 {
-                    ActionLogId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserActionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserAuditId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ActionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ActionTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Action = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    TimeOfAction = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserActionLogs", x => x.ActionLogId);
+                    table.PrimaryKey("PK_UserActions", x => x.UserActionId);
                     table.ForeignKey(
-                        name: "FK_UserActionLogs_UserActions_ActionId",
-                        column: x => x.ActionId,
-                        principalTable: "UserActions",
-                        principalColumn: "ActionId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UserActionLogs_UserAudits_UserAuditId",
+                        name: "FK_UserActions_UserAudits_UserAuditId",
                         column: x => x.UserAuditId,
                         principalTable: "UserAudits",
                         principalColumn: "UserAuditId",
@@ -326,13 +308,8 @@ namespace AppAPI.Migrations
                 column: "SellerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserActionLogs_ActionId",
-                table: "UserActionLogs",
-                column: "ActionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserActionLogs_UserAuditId",
-                table: "UserActionLogs",
+                name: "IX_UserActions_UserAuditId",
+                table: "UserActions",
                 column: "UserAuditId");
 
             migrationBuilder.CreateIndex(
@@ -368,16 +345,13 @@ namespace AppAPI.Migrations
                 name: "TransactionHistories");
 
             migrationBuilder.DropTable(
-                name: "UserActionLogs");
+                name: "UserActions");
 
             migrationBuilder.DropTable(
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
                 name: "Products");
-
-            migrationBuilder.DropTable(
-                name: "UserActions");
 
             migrationBuilder.DropTable(
                 name: "UserAudits");

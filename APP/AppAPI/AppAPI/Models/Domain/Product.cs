@@ -30,6 +30,6 @@ using System.ComponentModel.DataAnnotations.Schema;
         
         public User Seller { get; set; }
 
-        public ICollection<TransactionHistory> Transactions { get; set; } = new List<TransactionHistory>();
+        public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
     }
 }
