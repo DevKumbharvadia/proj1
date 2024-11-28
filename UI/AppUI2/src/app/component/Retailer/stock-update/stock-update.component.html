@@ -1,0 +1,53 @@
+<div class="min-h-screen flex flex-col items-center bg-[#F3F4F6] py-8">
+    <div class="max-w-lg w-full bg-white p-6 rounded-lg shadow-lg">
+        <!-- Header -->
+        <h2 class="text-3xl font-semibold text-[#393E46] mb-6 text-center">Update Product Stock</h2>
+
+        <!-- Product Selector -->
+        <div class="mb-6">
+            <label for="product-select" class="block text-sm font-medium text-[#393E46] mb-2">
+                Selected Product
+            </label>
+            <input
+                id="product-select"
+                class="block w-full py-2 px-3 bg-[#EEEEEE] border border-[#393E46] rounded-md text-[#222831] cursor-not-allowed"
+                [(ngModel)]="selectedProductId"
+                disabled
+            />
+        </div>
+
+        <!-- Stock Input -->
+        <div class="mb-6">
+            <label for="stock-quantity" class="block text-sm font-medium text-[#393E46] mb-2">
+                Stock Quantity to Add
+            </label>
+            <input
+                id="stock-quantity"
+                type="number"
+                min="1"
+                class="block w-full py-2 px-3 bg-[#EEEEEE] border border-[#393E46] rounded-md text-[#222831] focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                placeholder="Enter quantity"
+                [(ngModel)]="quantityToAdd"
+            />
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end gap-4">
+            <button
+                class="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                type="button"
+                (click)="cancelUpdate()"
+            >
+                Cancel
+            </button>
+            <button
+                class="px-6 py-2 bg-[#00ADB5] text-white font-medium rounded-md hover:bg-[#007B84] focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                type="button"
+                [disabled]="!selectedProductId || quantityToAdd <= 0"
+                (click)="updateStock()"
+            >
+                Update Stock
+            </button>
+        </div>
+    </div>
+</div>

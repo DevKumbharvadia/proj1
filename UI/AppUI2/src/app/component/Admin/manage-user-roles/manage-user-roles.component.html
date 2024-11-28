@@ -1,0 +1,95 @@
+<div class="min-h-screen flex flex-col items-center bg-[#F3F4F6] py-8">
+    <div class="max-w-md w-full bg-white p-6 rounded-lg shadow-lg">
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b-2 border-[#393E46] pb-4">
+            <h2 class="text-2xl font-semibold text-[#393E46]">Manage User Roles</h2>
+            <button
+                class="text-sm px-4 py-2 bg-[#00ADB5] text-white rounded-lg hover:bg-[#007B84] focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                (click)="saveChanges()"
+            >
+                Save Changes
+            </button>
+        </div>
+
+        <!-- User Info -->
+        <div class="pt-6">
+            <p class="text-[#222831] font-medium text-lg">User: John Doe</p>
+        </div>
+
+        <!-- Roles Management -->
+        <div class="pt-6">
+            <div class="flex items-center mb-4">
+                <input
+                    id="select-all"
+                    type="checkbox"
+                    class="w-4 h-4 text-[#00ADB5] bg-[#EEEEEE] border-[#393E46] rounded focus:ring-[#00ADB5]"
+                    (change)="toggleSelectAll($event)"
+                />
+                <label for="select-all" class="ml-2 text-sm font-semibold text-[#222831]">
+                    Select All Roles
+                </label>
+            </div>
+            <div class="space-y-4">
+                <!-- Role 1 -->
+                <div class="flex items-center">
+                    <input
+                        id="role-admin"
+                        type="checkbox"
+                        class="w-4 h-4 text-[#00ADB5] bg-[#EEEEEE] border-[#393E46] rounded focus:ring-[#00ADB5]"
+                        [checked]="isRoleSelected('Admin')"
+                        (change)="toggleRole('Admin')"
+                    />
+                    <label for="role-admin" class="ml-2 text-sm text-[#222831]">
+                        Admin
+                    </label>
+                </div>
+
+                <!-- Role 2 -->
+                <div class="flex items-center">
+                    <input
+                        id="role-editor"
+                        type="checkbox"
+                        class="w-4 h-4 text-[#00ADB5] bg-[#EEEEEE] border-[#393E46] rounded focus:ring-[#00ADB5]"
+                        [checked]="isRoleSelected('Editor')"
+                        (change)="toggleRole('Editor')"
+                    />
+                    <label for="role-editor" class="ml-2 text-sm text-[#222831]">
+                        Editor
+                    </label>
+                </div>
+
+                <!-- Role 3 -->
+                <div class="flex items-center">
+                    <input
+                        id="role-viewer"
+                        type="checkbox"
+                        class="w-4 h-4 text-[#00ADB5] bg-[#EEEEEE] border-[#393E46] rounded focus:ring-[#00ADB5]"
+                        [checked]="isRoleSelected('Viewer')"
+                        (change)="toggleRole('Viewer')"
+                    />
+                    <label for="role-viewer" class="ml-2 text-sm text-[#222831]">
+                        Viewer
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex items-center justify-between mt-6 pt-4 border-t-2 border-[#393E46]">
+            <button
+                class="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                type="button"
+                (click)="cancelChanges()"
+            >
+                Cancel
+            </button>
+            <button
+                class="px-6 py-2 bg-[#00ADB5] text-white font-medium rounded-md hover:bg-[#007B84] focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                type="button"
+                (click)="saveChanges()"
+            >
+                Save Changes
+            </button>
+        </div>
+    </div>
+</div>

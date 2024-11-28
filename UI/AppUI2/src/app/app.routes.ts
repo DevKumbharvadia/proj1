@@ -1,17 +1,21 @@
 import { Routes } from '@angular/router';
-import { LayoutComponent } from './component/layout/layout.component';
-import { LoginComponent } from './component/login/login.component';
-import { RegisterComponent } from './component/register/register.component';
-import { HomeComponent } from './component/home/home.component';
-import { AuditComponent } from './component/audit/audit.component';
-import { CartComponent } from './component/cart/cart.component';
-import { ManageUserComponent } from './component/manage-user/manage-user.component';
-import { ProfileComponent } from './component/profile/profile.component';
-import { AddProductComponent } from './component/add-product/add-product.component';
-import { ProductListComponent } from './component/product-list/product-list.component';
-import { UpdateProductComponent } from './component/update-product/update-product.component';
+import { LayoutComponent } from './component/Common/layout/layout.component';
+import { LoginComponent } from './component/Auth/login/login.component';
+import { RegisterComponent } from './component/Auth/register/register.component';
+import { HomeComponent } from './component/Customer/home/home.component';
+import { AuditComponent } from './component/Admin/audit/audit.component';
+import { CartComponent } from './component/Customer/cart/cart.component';
+import { ManageUserComponent } from './component/Admin/manage-user/manage-user.component';
+import { ProfileComponent } from './component/Customer/profile/profile.component';
+import { AddProductComponent } from './component/Retailer/add-product/add-product.component';
+import { ProductListComponent } from './component/Retailer/product-list/product-list.component';
+import { UpdateProductComponent } from './component/Retailer/update-product/update-product.component';
 import { authGuard } from './guard/auth.guard';
-import { RetailerStatsComponent } from './component/retailer-stats/retailer-stats.component';
+import { RetailerStatsComponent } from './component/Retailer/retailer-stats/retailer-stats.component';
+import { NotificationComponent } from './component/Common/notification/notification.component';
+import { ManageAllProductsComponent } from './component/Admin/manage-all-products/manage-all-products.component';
+import { ManageUserRolesComponent } from './component/Admin/manage-user-roles/manage-user-roles.component';
+import { StockUpdateComponent } from './component/Retailer/stock-update/stock-update.component';
 
 export const routes: Routes = [
   {
@@ -29,7 +33,7 @@ export const routes: Routes = [
   {
     path: 'layout',
     component: LayoutComponent,
-    canActivate: [authGuard],
+    // canActivate: [authGuard],
     children: [
       {
         path: 'login',
@@ -40,20 +44,18 @@ export const routes: Routes = [
         component: RegisterComponent,
       },
       {
+        path: 'notification',component: NotificationComponent
+      }
+    ],
+  },
+  {
+    path: 'layout',
+    component: LayoutComponent,
+    // canActivate: [authGuard],
+    children: [
+      {
         path: 'home',
         component: HomeComponent,
-      },
-      {
-        path: 'audit',
-        component: AuditComponent,
-      },
-      {
-        path: 'cart',
-        component: CartComponent,
-      },
-      {
-        path: 'manage-user',
-        component: ManageUserComponent,
       },
       {
         path: 'cart',
@@ -61,24 +63,58 @@ export const routes: Routes = [
       },
       {
         path: 'profile',
-        component: ProfileComponent
+        component: ProfileComponent,
+      },
+    ],
+  },
+  {
+    path: 'layout',
+    component: LayoutComponent,
+    // canActivate: [authGuard],
+    children: [
+      {
+        path: 'audit',
+        component: AuditComponent,
       },
       {
+        path: 'manage-user',
+        component: ManageUserComponent,
+      },
+      {
+        path: 'manage-all-products',
+        component: ManageAllProductsComponent
+      },
+      {
+        path: 'manage-user-roles',
+        component: ManageUserRolesComponent
+      }
+    ],
+  },
+  {
+    path: 'layout',
+    component: LayoutComponent,
+    // canActivate: [authGuard],
+    children: [
+      {
         path: 'add-product',
-        component: AddProductComponent
+        component: AddProductComponent,
       },
       {
         path: 'product-list',
-        component: ProductListComponent
+        component: ProductListComponent,
       },
       {
         path: 'update-product',
-        component: UpdateProductComponent
+        component: UpdateProductComponent,
       },
       {
         path: 'stats',
-        component: RetailerStatsComponent
+        component: RetailerStatsComponent,
+      },
+      {
+        path: 'stock-update',
+        component: StockUpdateComponent
       }
-    ]
+    ],
   },
 ];

@@ -1,0 +1,85 @@
+<div class="min-h-screen flex flex-col items-center bg-[#F3F4F6] py-8">
+  <div class="max-w-md w-full bg-white p-6 rounded-lg shadow-lg">
+    <!-- Header -->
+    <div class="flex items-center justify-between border-b-2 border-[#393E46] pb-4">
+      <h2 class="text-2xl font-semibold text-[#393E46]">Notifications</h2>
+      <button
+        class="text-sm px-4 py-2 bg-[#00ADB5] text-white rounded-lg hover:bg-[#007B84] focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+      >
+        Mark All as Read
+      </button>
+    </div>
+
+    <!-- Notification List -->
+    <div class="space-y-4 pt-6">
+      <!-- Notification Item -->
+      <div class="flex items-start p-4 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100">
+        <div
+          class="bg-[#00ADB5] text-white h-10 w-10 rounded-full flex items-center justify-center font-bold"
+        >
+          1
+        </div>
+        <div class="ml-4 flex-1">
+          <p class="text-lg font-semibold text-[#222831]">New Message</p>
+          <p class="text-sm text-gray-600">You have a new message from John.</p>
+        </div>
+        <button
+          class="text-sm font-medium text-[#00ADB5] hover:underline hover:text-[#007B84]"
+        >
+          View
+        </button>
+      </div>
+
+      <!-- Another Notification -->
+      <div class="flex items-start p-4 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100">
+        <div
+          class="bg-[#00ADB5] text-white h-10 w-10 rounded-full flex items-center justify-center font-bold"
+        >
+          2
+        </div>
+        <div class="ml-4 flex-1">
+          <p class="text-lg font-semibold text-[#222831]">Update Available</p>
+          <p class="text-sm text-gray-600">Version 1.2.3 is ready to install.</p>
+        </div>
+        <button
+          class="text-sm font-medium text-[#00ADB5] hover:underline hover:text-[#007B84]"
+        >
+          Update
+        </button>
+      </div>
+
+      <!-- Another Notification -->
+      <div class="flex items-start p-4 bg-gray-50 border border-gray-300 rounded-lg hover:bg-gray-100">
+        <div
+          class="bg-[#00ADB5] text-white h-10 w-10 rounded-full flex items-center justify-center font-bold"
+        >
+          3
+        </div>
+        <div class="ml-4 flex-1">
+          <p class="text-lg font-semibold text-[#222831]">Reminder</p>
+          <p class="text-sm text-gray-600">Your subscription expires in 3 days.</p>
+        </div>
+        <button
+          class="text-sm font-medium text-[#00ADB5] hover:underline hover:text-[#007B84]"
+        >
+          Renew
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex items-center justify-between mt-6 pt-4 border-t-2 border-[#393E46]">
+      <button
+        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 disabled:opacity-50"
+      >
+        Previous
+      </button>
+      <p class="text-sm text-[#393E46]">Page 1 of 3</p>
+      <button
+        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 disabled:opacity-50"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>
