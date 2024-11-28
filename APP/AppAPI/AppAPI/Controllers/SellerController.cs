@@ -20,13 +20,11 @@ namespace AppAPI.Controllers
     public class SellerController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _environment;
         private readonly SieveProcessor _sieveProcessor;
 
-        public SellerController(ApplicationDbContext context, IWebHostEnvironment environment, SieveProcessor sieveProcessor)
+        public SellerController(ApplicationDbContext context, SieveProcessor sieveProcessor)
         {
             _context = context;
-            _environment = environment;
             _sieveProcessor = sieveProcessor;
         }
 

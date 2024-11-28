@@ -18,13 +18,11 @@ namespace AppAPI.Controllers
     public class SortedProductController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _environment;
         private readonly SieveProcessor _sieveProcessor;
 
-        public SortedProductController(ApplicationDbContext context, IWebHostEnvironment environment, SieveProcessor sieveProcessor)
+        public SortedProductController(ApplicationDbContext context, SieveProcessor sieveProcessor)
         {
             _context = context;
-            _environment = environment;
             _sieveProcessor = sieveProcessor;
         }
 

@@ -13,13 +13,11 @@ namespace AppAPI.Controllers
     public class ProductStockController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _environment;
         private readonly SieveProcessor _sieveProcessor;
 
-        public ProductStockController(ApplicationDbContext context, IWebHostEnvironment environment, SieveProcessor sieveProcessor)
+        public ProductStockController(ApplicationDbContext context, SieveProcessor sieveProcessor)
         {
             _context = context;
-            _environment = environment;
             _sieveProcessor = sieveProcessor;
         }
 
@@ -49,7 +47,7 @@ namespace AppAPI.Controllers
             });
         }
 
-        [HttpGet("GetStockLogByProductId/{id}")]
+        [HttpGet("GetStockLogByProductId")]
         public async Task<IActionResult> GetStockUpdateById(Guid id)
         {
             var stockLog = await _context.ProductStockLogs
@@ -120,7 +118,7 @@ namespace AppAPI.Controllers
             });
         }
 
-        [HttpPut("UpdateProductStockLog/{id}")]
+        [HttpPut("UpdateProductStockLog")]
         public async Task<IActionResult> UpdateProductStockUpdate(Guid id, [FromBody] ProductStockAddRequest stockUpdateDto)
         {
             var stockLog = await _context.ProductStockLogs.FindAsync(id);
@@ -164,7 +162,7 @@ namespace AppAPI.Controllers
             });
         }
 
-        [HttpDelete("DeleteProductStockLog/{id}")]
+        [HttpDelete("DeleteProductStockLog")]
         public async Task<IActionResult> DeleteProductStockUpdate(Guid id)
         {
             var stockLog = await _context.ProductStockLogs.FindAsync(id);

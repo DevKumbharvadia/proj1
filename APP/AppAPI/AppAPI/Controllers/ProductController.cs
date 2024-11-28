@@ -15,13 +15,11 @@ namespace AppAPI.Controllers
     public class ProductController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IWebHostEnvironment _environment;
         private readonly SieveProcessor _sieveProcessor;
 
-        public ProductController(ApplicationDbContext context, IWebHostEnvironment environment, SieveProcessor sieveProcessor)
+        public ProductController(ApplicationDbContext context, SieveProcessor sieveProcessor)
         {
             _context = context;
-            _environment = environment;
             _sieveProcessor = sieveProcessor;
         }
 

@@ -13,12 +13,10 @@ namespace TodoAPI.Controllers
     public class AdminController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IConfiguration _config;
 
-        public AdminController(ApplicationDbContext context, IConfiguration config)
+        public AdminController(ApplicationDbContext context)
         {
             _context = context;
-            _config = config;
         }
 
         [HttpPost("RewriteRoles")]
