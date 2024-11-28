@@ -1,6 +1,10 @@
 ﻿using AppAPI.Data;
+using AppAPI.Models.Domain;
+using AppAPI.Models.RequestModel;
+using AppAPI.Models.ResponseModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AppAPI.Controllers
 {
@@ -14,5 +18,75 @@ namespace AppAPI.Controllers
         {
             _context = context;
         }
+
+        [HttpGet("GetBuyerInfo")]
+        public async Task<IActionResult> GetBuyerInfo()
+        {
+            var buyerInfo = await _context.BuyerInfos.ToListAsync();
+
+            return Ok(new ApiResponse<List<BuyerInfo>>
+            {
+                Message = "Data retrieved successfully",
+                Success = true,
+                Data = buyerInfo,
+            });
+        }
+
+        [HttpPost("AddBuyerInfo")]
+        public async Task<IActionResult> AddBuyerInfo([FromForm] BuyerInfoRequest buyerInfoRequest)
+        {
+            if (buyerInfoRequest == null)
+            {
+                return BadRequest("Invalid data.");
+            }
+
+            var newBuyerInfo = new BuyerInfo
+            {
+                BuyerInfoId = Guid.NewGuid(),
+                UserId = buyerInfoRequest.UserId,
+                ContactNumber = buyerInfoRequest.ContactNumber,
+                Address = buyerInfoRequest.Address
+            };
+
+            _context.BuyerInfos.Add(newBuyerInfo);
+            await _context.SaveChangesAsync();
+
+            return Ok(new ApiResponse<BuyerInfo>
+            {
+                Message = "Buyer information added successfully.",
+                Success = true,
+                Data = newBuyerInfo
+            });
+        }
+
+        [HttpPut("UpdateBuyerInfo")]
+        public async Task<IActionResult> UpdateBuyerInfo(Guid UserId, [FromBody] BuyerInfoUpdateRequest buyerInfoRequest)
+        {
+            if (buyerInfoRequest == null)
+            {
+                return BadRequest("Invalid data.");
+            }
+
+            var existingBuyerInfo = await _context.BuyerInfos.FirstOrDefaultAsync(b => b.UserId == UserId);
+
+            if (existingBuyerInfo == null)
+            {
+                return NotFound($"BuyerInfo with ID {UserId} not found.");
+            }
+
+            existingBuyerInfo.ContactNumber = buyerInfoRequest.ContactNumber;
+            existingBuyerInfo.Address = buyerInfoRequest.Address;
+
+            _context.BuyerInfos.Update(existingBuyerInfo);
+            await _context.SaveChangesAsync();
+
+            return Ok(new ApiResponse<BuyerInfo>
+            {
+                Message = "Buyer information updated successfully.",
+                Success = true,
+                Data = existingBuyerInfo
+            });
+        }
+
     }
 }
