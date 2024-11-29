@@ -10,7 +10,7 @@ namespace AppAPI.Models.Domain
         public Guid StockLogId { get; set; } // Primary Key
 
         [Required]
-        public Guid ProductId { get; set; } // Foreign Key to Product
+        public Guid ProductId { get; set; } // Foreign Key to Proaduct
 
         [Required]
         public int QuantityChanged { get; set; }

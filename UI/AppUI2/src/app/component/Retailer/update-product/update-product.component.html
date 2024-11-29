@@ -78,7 +78,7 @@
       </div>
 
       <!-- Stock Quantity -->
-      <div class="relative z-0 w-full my-7 group">
+      <!-- <div class="relative z-0 w-full my-7 group">
         <input
           type="number"
           name="stockQuantity"
@@ -94,14 +94,21 @@
         >
           Stock Quantity
         </label>
-      </div>
+      </div> -->
 
       <!-- Submit Button -->
+      <button
+      type="submit"
+      class="w-full my-2 py-2.5 text-sm font-medium text-[#222831] bg-[#71C9CE] hover:bg-[#00ADB5] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#00ADB5] text-center"
+      (click)="addStock()"
+    >
+      Add Stock
+    </button>
       <button
         type="submit"
         class="w-full py-2.5 text-sm font-medium text-[#222831] bg-[#71C9CE] hover:bg-[#00ADB5] rounded-lg focus:outline-none focus:ring-4 focus:ring-[#00ADB5] text-center"
       >
-        Update Product
+        Update Product Info
       </button>
     </form>
   </div>

@@ -20,7 +20,7 @@ export class AuditComponent implements OnInit {
 
   getAllAudits(){
     this.adminServices.getAllAudits().subscribe((res: any)=>{
-      this.audits = res;
+      this.audits = res.data;
     });
   }
 

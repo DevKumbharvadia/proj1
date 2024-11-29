@@ -59,6 +59,10 @@ export class UpdateProductComponent implements OnInit {
     }
   }
 
+  addStock(){
+    this.router.navigateByUrl("layout/stock-update")
+  }
+
   onUpdate(): void {
 
     const formData = new FormData();

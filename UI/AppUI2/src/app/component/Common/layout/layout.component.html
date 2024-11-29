@@ -112,7 +112,7 @@
             >Retailer Stats</a
           >
         </li>
-      }
+      } @if (userRoles.includes('seller') || userRoles.includes('buyer')) {
       <li>
         <a
           routerLink="notification"
@@ -121,6 +121,8 @@
           >Notification</a
         >
       </li>
+    } @if (userRoles.includes('admin')) {
+
       <li>
         <a
           routerLink="manage-user-roles"
@@ -129,6 +131,8 @@
           >Manage User Roles</a
         >
       </li>
+    } @if (userRoles.includes('admin')) {
+
       <li>
         <a
           routerLink="manage-all-products"
@@ -137,6 +141,8 @@
           >All Products</a
         >
       </li>
+    } @if (userRoles.includes('seller')) {
+
       <li>
         <a
           routerLink="stock-update"
@@ -145,6 +151,7 @@
           >Stock Update</a
         >
       </li>
+    }
         <li>
           <button (click)="onLogout()" class="text-[#dd3d53]">Logout</button>
         </li>

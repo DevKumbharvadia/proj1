@@ -43,7 +43,7 @@ export class AuthService {
     return this.http.post<any>(environment.API_URl + Constant.API_METHOD, {});
   }
 
-  getRoles(): Observable<any> {
+  getAllRoles(): Observable<any> {
     return this.http.get<any>(
       environment.API_URl + Constant.API_METHOD.ROLE.GET_ALL
     );

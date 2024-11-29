@@ -51,9 +51,9 @@ export class CartComponent implements OnInit {
         (cartItem: { productId: string; cartQuantity: number }) => {
           this.productService
             .getProductById(cartItem.productId)
-            .subscribe((product: any) => {
+            .subscribe((res: any) => {
               this.cartItems.push({
-                ...product,
+                ...res.data,
                 cartQuantity: cartItem.cartQuantity,
               });
             });
@@ -150,6 +150,7 @@ export class CartComponent implements OnInit {
     }
   
     this.cartItems.forEach((item) => {
+      console.log(item);
       if (!item.productId || !item.cartQuantity) {
         console.error('Invalid cart item:', item);
         return;

@@ -2,7 +2,7 @@
 
 namespace AppAPI.Models.RequestModel
 {
-    public class Purchaserequest
+    public class PurchaseRequest
     {
         [Required]
         public Guid ProductId { get; set; }

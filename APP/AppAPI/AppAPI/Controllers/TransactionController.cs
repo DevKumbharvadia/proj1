@@ -107,7 +107,7 @@ namespace AppAPI.Controllers
         }
 
         [HttpPost("MakePurchase")]
-        public async Task<IActionResult> MakePurchase(Purchaserequest purchase)
+        public async Task<IActionResult> MakePurchase(PurchaseRequest purchase)
         {
             if (purchase == null)
                 return BadRequest(new ApiResponse<object> { Success = false, Message = "Purchase details are required." });

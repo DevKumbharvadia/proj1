@@ -27,6 +27,6 @@ export class MiscService {
   }
 
   loadSalesData(){
-    return this.http.get(environment.API_URl + Constant.API_METHOD.SELLER.BY_ID + `?sellerId=${sessionStorage.getItem('userId')}`);
+    return this.http.get(environment.API_URl + Constant.API_METHOD.SELLER.SALES_DATA_BY_ID + `?sellerId=${sessionStorage.getItem('userId')}`);
   }
 }

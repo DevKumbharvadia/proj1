@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment.development';
 import { Constant } from '../constant/constant';
 import { IFilter } from '../model/interface';
-import { Product } from '../model/model';
+import { AddProductStock, Product } from '../model/model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +41,7 @@ export class ProductService {
       params.append('PageSize', filter.PageSize.toString());
     }
 
-    const url = `${environment.API_URl}${Constant.API_METHOD.PRODUCT.GET_SORTED_BY_SELLER_ID}?${params.toString()}`;
+    const url = `${environment.API_URl}${Constant.API_METHOD.SORTED_PRODUCT.GET_BY_SELLER_ID}?${params.toString()}`;
 
     return this.http.get<any>(url + `&SellerId=${sessionStorage.getItem('userId')}`);
   }
@@ -65,11 +65,14 @@ export class ProductService {
       params.append('PageSize', filter.PageSize.toString());
     }
 
-    const url = `${environment.API_URl}${Constant.API_METHOD.PRODUCT.GET_SORTED}?${params.toString()}`;
+    const url = `${environment.API_URl}${Constant.API_METHOD.SORTED_PRODUCT.GET_SORTED_PRODUCTS}?${params.toString()}`;
 
     return this.http.get<any>(url);
   }
 
+  addProductStock(prod: AddProductStock){
+    return this.http.post<any>(environment.API_URl + Constant.API_METHOD.PRODUCT_STOCK.ADD_PRODUCT_STOCK_LOG,prod);
+  }
 
   getProductById(Id: string): Observable<any>{
     return this.http.get<any>(environment.API_URl + Constant.API_METHOD.PRODUCT.GET_BY_ID + `?id=${Id}`);

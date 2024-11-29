@@ -65,8 +65,8 @@ export class RegisterComponent implements OnInit {
   }
 
   loadRoles() {
-    this.authService.getRoles().subscribe((res: any) => {
-      this.roles = res;
+    this.authService.getAllRoles().subscribe((res: any) => {
+      this.roles = res.data;
     });
   }
 }

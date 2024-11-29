@@ -23,7 +23,8 @@ export class ProfileComponent implements OnInit {
 
   getUserInfo(Id: string) {
     this.adminService.getAllUserInfoById(Id).subscribe((res: any) => {
-      this.user = res;
+      console.log(res);
+      this.user = res.data;
     });
   }
 
@@ -34,7 +35,7 @@ export class ProfileComponent implements OnInit {
 
   getUserPurchases(Id: string){
     this.adminService.getUserPurchases(Id).subscribe((res: any)=>{
-      this.purchases = res;
+      this.purchases = res.data;
     })
   }
 }

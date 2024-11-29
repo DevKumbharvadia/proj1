@@ -144,3 +144,8 @@ export class SalesData {
     ItemsSold: []
   };
 }
+
+export class AddProductStock {
+  productId: string ='';
+  quantityChanged: number = 0;
+}

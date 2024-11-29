@@ -18,9 +18,6 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserRoles();
-    this.userRoles.push("seller");
-    this.userRoles.push("buyer");
-    this.userRoles.push("admin");
 
   }
 
