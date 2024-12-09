@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AppAPI.Models.ResponseModel;
+using AppAPI.Models.RequestModel;
+using AppAPI.Models.DTO;
 
 namespace AppAPI.Controllers
 {
@@ -45,29 +47,71 @@ namespace AppAPI.Controllers
             });
         }
 
-        [HttpGet("GetUserActionsById")]
+        [HttpGet("GetUserActionsByAuditId")]
         public async Task<IActionResult> GetUserActionsById(Guid Id)
         {
-            var userAction = await _context.UserActions
-                                            .Where(t => t.UserActionId == Id)
-                                            .FirstOrDefaultAsync();
+            var userActions = await _context.UserActions
+                                             .Where(t => t.UserAuditId == Id)
+                                             .Select(t => new UserActionDTO
+                                             {
+                                                 UserActionId = t.UserActionId,
+                                                 Action = t.Action,
+                                                 TimeOfAction = t.TimeOfAction
+                                             })
+                                             .ToListAsync();
 
-            if (userAction == null)
+            if (!userActions.Any())
             {
-                return NotFound(new ApiResponse<UserAction>
+                return NotFound(new ApiResponse<List<UserActionDTO>>
                 {
-                    Message = "User action not found.",
+                    Message = "No user actions found.",
                     Success = false,
                     Data = null
                 });
             }
 
-            return Ok(new ApiResponse<UserAction>
+            return Ok(new ApiResponse<List<UserActionDTO>>
             {
-                Message = "User action retrieved successfully",
+                Message = "User actions retrieved successfully",
                 Success = true,
-                Data = userAction
+                Data = userActions
             });
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUserAction([FromBody] UserActionRequest userAction)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(new { Message = "Invalid input data", Success = false });
+
+            try
+            {
+                // Check if the referenced UserAudit exists
+                var userAuditExists = await _context.UserAudits.AnyAsync(ua => ua.UserAuditId == userAction.UserAuditId);
+                if (!userAuditExists)
+                    return NotFound(new { Message = "Referenced UserAudit not found", Success = false });
+
+                _context.UserActions.Add(new UserAction
+                {
+                    UserActionId = Guid.NewGuid(),
+                    UserAuditId = userAction.UserAuditId,
+                    TimeOfAction = DateTime.UtcNow,
+                    Action = userAction.Action
+                });
+                await _context.SaveChangesAsync();
+
+                return Ok(new ApiResponse<UserAction>
+                {
+                    Message = "User action created successfully",
+                    Success = true,
+                });
+            }
+            catch (Exception ex)
+            {
+                // Handle unexpected exceptions
+                return StatusCode(500, new { Message = $"Internal server error: {ex.Message}", Success = false });
+            }
         }
     }
 }

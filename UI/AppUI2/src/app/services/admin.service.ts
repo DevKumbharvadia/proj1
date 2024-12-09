@@ -11,6 +11,7 @@ export class AdminService {
 
   http = inject(HttpClient);
   editUser: string = '';
+  auditId: string = '';
 
   constructor() { }
 
@@ -52,5 +53,9 @@ export class AdminService {
   //ok
   banUser(Id: string): Observable<any>{
     return this.http.post<any>(environment.API_URl + Constant.API_METHOD.ADMIN.BLACKLIST_USER + "?Id=" + `${Id}`,{});
+  }
+
+  getAuditdetails(){
+    return this.http.get<any>(environment.API_URl + Constant.API_METHOD.USER_ACTION.GET_BY_AUDIT_ID + '?Id=' + `${this.auditId}`);
   }
 }

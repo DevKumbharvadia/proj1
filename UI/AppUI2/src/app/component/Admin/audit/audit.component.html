@@ -99,12 +99,13 @@
         <th scope="col" class="px-6 py-3">User Name</th>
         <th scope="col" class="px-6 py-3">Login Time</th>
         <th scope="col" class="px-6 py-3">Logout Time</th>
+        <th scope="col" class="px-6 py-3">Action</th>
       </tr>
     </thead>
     <tbody>
       @for (audit of audits; track $index){
       <tr
-        class="bg-[#EEEEEE] border-b border-[#393E46] hover:bg-[#00ADB5] hover:text-white"
+        class="bg-[#EEEEEE] border-b border-[#393E46] hover:bg-[#94e3e786] hover:text-black"
       >
         <td class="w-4 p-4">{{$index + 1}}</td>
         <th
@@ -119,6 +120,15 @@
         <td class="px-6 py-4">
           {{audit.logoutTime ? (audit.logoutTime | date:'MM/dd/yyyy hh:mm a') : 'Session Active'}}
         </td>
+        <td class="px-6 py-4">
+          <button class=""> <button
+              class="bg-blue-500 text-white py-1 m-2 px-3 rounded hover:bg-blue-600"
+              (click)="auditDetails(audit.userAuditId)"
+            >
+              Details
+            </button></button>
+        </td>
+
       </tr>
       }
     </tbody>

@@ -62,7 +62,7 @@ export const Constant = {
         },
         USER_ACTION: {
             GET_ALL: '/api/UserAction/GetUserActions',
-            GET_BY_USER_ID: '/api/UserAction/GetUserActionsById',
+            GET_BY_AUDIT_ID: '/api/UserAction/GetUserActionsByAuditId',
         },
         USER_AUDIT: {
             GET_ALL: '/api/UserAudit/GetAllAudits',

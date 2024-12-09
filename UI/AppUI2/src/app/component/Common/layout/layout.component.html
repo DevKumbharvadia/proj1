@@ -112,16 +112,7 @@
             >Retailer Stats</a
           >
         </li>
-      } @if (userRoles.includes('seller') || userRoles.includes('buyer')) {
-      <li>
-        <a
-          routerLink="notification"
-          routerLinkActive="active"
-          class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
-          >Notification</a
-        >
-      </li>
-    } @if (userRoles.includes('admin')) {
+      } @if (userRoles.includes('admin')) {
 
       <li>
         <a
@@ -149,6 +140,16 @@
           routerLinkActive="active"
           class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
           >Stock Update</a
+        >
+      </li>
+    } @if (userRoles.includes('admin')) {
+
+      <li>
+        <a
+          routerLink="audit-details"
+          routerLinkActive="active"
+          class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
+          >Audit Details</a
         >
       </li>
     }

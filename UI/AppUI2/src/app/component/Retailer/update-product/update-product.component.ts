@@ -39,12 +39,12 @@ export class UpdateProductComponent implements OnInit {
   loadData(Id: string): void {
     this.productService.getProductById(Id).subscribe(
       (res: any) => {
-        this.product.productName = res.productName || '';
-        this.product.description = res.description || '';
-        this.product.price = res.price || 0;
-        this.product.stockQuantity = res.stockQuantity || 0;
-        this.product.sellerId = res.sellerId || this.product.sellerId;
-        this.imageData = res.imageContent; // Store base64 image data
+        this.product.productName = res.data.productName || '';
+        this.product.description = res.data.description || '';
+        this.product.price = res.data.price || 0;
+        this.product.stockQuantity = res.data.stockQuantity || 0;
+        this.product.sellerId = res.data.sellerId || this.product.sellerId;
+        this.imageData = res.data.imageContent; // Store base64 image data
       },
       (error) => {
         console.error('Error fetching product details:', error);

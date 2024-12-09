@@ -215,7 +215,6 @@ namespace AppAPI.Controllers
             };
 
             _context.DeletedProducts.Add(deletedProduct);
-            _context.Products.Remove(product);
 
             try
             {

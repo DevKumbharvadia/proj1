@@ -149,3 +149,9 @@ export class AddProductStock {
   productId: string ='';
   quantityChanged: number = 0;
 }
+
+export class UserAction {
+  userActionId: string = '';
+  action: string = '';
+  timeOfAction: Date = new Date();
+}

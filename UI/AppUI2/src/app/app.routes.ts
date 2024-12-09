@@ -12,10 +12,10 @@ import { ProductListComponent } from './component/Retailer/product-list/product-
 import { UpdateProductComponent } from './component/Retailer/update-product/update-product.component';
 import { authGuard } from './guard/auth.guard';
 import { RetailerStatsComponent } from './component/Retailer/retailer-stats/retailer-stats.component';
-import { NotificationComponent } from './component/Common/notification/notification.component';
 import { ManageAllProductsComponent } from './component/Admin/manage-all-products/manage-all-products.component';
 import { ManageUserRolesComponent } from './component/Admin/manage-user-roles/manage-user-roles.component';
 import { StockUpdateComponent } from './component/Retailer/stock-update/stock-update.component';
+import { AuditDetailsComponent } from './component/Admin/audit-details/audit-details.component';
 
 export const routes: Routes = [
   {
@@ -43,9 +43,6 @@ export const routes: Routes = [
         path: 'register',
         component: RegisterComponent,
       },
-      {
-        path: 'notification',component: NotificationComponent
-      }
     ],
   },
   {
@@ -87,6 +84,10 @@ export const routes: Routes = [
       {
         path: 'manage-user-roles',
         component: ManageUserRolesComponent
+      },
+      {
+        path: 'audit-details',
+        component: AuditDetailsComponent
       }
     ],
   },
