@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { IRegisterModel } from '../../../model/interface';
 import { RegisterModel, Role } from '../../../model/model';
 import { AuthService } from '../../../services/auth.service';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AdminService } from '../../../services/admin.service';
 import { Router } from '@angular/router';
 
@@ -23,7 +23,7 @@ export class RegisterComponent implements OnInit {
     username: new FormControl(),
     password: new FormControl(),
     confirmPassword: new FormControl(),
-    email: new FormControl(),
+    email: new FormControl('', [Validators.required, Validators.email]),
     roleId: new FormControl(),
   });
 
@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit {
       .onRegister(
         this.registerForm.get('username')?.value,
         this.registerForm.get('password')?.value,
-        this.registerForm.get('email')?.value
+        this.registerForm.get('email')?.value ?? ''
       )
       .subscribe((res: any) => {
         userId = res.data?.userId;
