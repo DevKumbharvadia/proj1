@@ -138,6 +138,12 @@
               Edit
             </button>
             <button
+              class="bg-orange-500 text-white py-1 m-2 px-3 rounded hover:bg-orange-600"
+              (click)="onProductDetails(product.productId)"
+            >
+              Details
+            </button>
+            <button
               class="bg-red-500 text-white py-1 m-2 px-3 rounded hover:bg-red-600"
               (click)="deleteProduct(product.productId)"
             >
@@ -145,7 +151,7 @@
             </button>
           </div>
         </td>
-        
+
       </tr>
       }
     </tbody>
@@ -221,7 +227,7 @@
         />
       </div>
     </form>
-  
+
     <div class="bg-white shadow rounded-lg overflow-hidden">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">

@@ -21,9 +21,13 @@ export class LayoutComponent implements OnInit {
 
   }
 
+  AddUserAction(Action: string){
+    this.miscService.AddUserAction(Action).subscribe();
+  }
+
   getUserRoles() {
     this.miscService.getUserRoles().subscribe((res: any) => {
-      this.userRoles = res.data;  
+      this.userRoles = res.data;
     });
   }
 

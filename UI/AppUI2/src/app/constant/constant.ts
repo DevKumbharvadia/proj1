@@ -9,16 +9,17 @@ export const Constant = {
             LOGOUT: '/api/Auth/Logout',
             REGISTER: '/api/Auth/Register',
             LOGIN: '/api/Auth/Login',
-            REFRESH_TOKEN: '/api/Auth/Login',
+            REFRESH_TOKEN: '/api/Auth/refresh-token',
         },
         BUYER_INFO: {
-            GET_BUYER_INFO: '',
-            ADD_BUYER_INFO: '',
-            UPDATE_BUYER_INFO: ''
+            GET_BUYER_INFO: '/api/BuyerInfo/GetBuyerInfo',
+            ADD_BUYER_INFO: '/api/BuyerInfo/AddBuyerInfo',
+            UPDATE_BUYER_INFO: '/api/BuyerInfo/UpdateBuyerInfo'
         },
         PRODUCT: {
             GET_ALL: '/api/Product/GetAllProducts',
             GET_BY_ID: '/api/Product/GetProductById',
+            GET_PRODUCT_DETAILS_BY_ID : '/api/Product/GetProductDetailsById',
             ADD: '/api/Product/AddProduct',
             UPDATE: '/api/Product/UpdateProduct',
             DELETE: '/api/Product/DeleteProduct',
@@ -52,6 +53,8 @@ export const Constant = {
             MAKE_PURCHASE: '/api/Transaction/MakePurchase',
             GET_TRANSACTION_HISTORY: '/api/Transaction/getTransactionHistory',
             GET_TRANSACTION_HISTORY_BY_USER_ID: '/api/Transaction/getTransactionHistoryByUserId',
+            GET_UNSHIPED_PRODUCTS: '/api/Transaction/getAllUnshippedTransaction',
+            SHIP_PRODUCT: '/api/Transaction/ShipItems'
         },
         USER: {
             ADD_USER: '/api/User/AddUser',
@@ -63,6 +66,7 @@ export const Constant = {
         USER_ACTION: {
             GET_ALL: '/api/UserAction/GetUserActions',
             GET_BY_AUDIT_ID: '/api/UserAction/GetUserActionsByAuditId',
+            ADD_ACTION: '/api/UserAction/AddAction',
         },
         USER_AUDIT: {
             GET_ALL: '/api/UserAudit/GetAllAudits',

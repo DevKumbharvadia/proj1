@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { UserAction, UserAudit } from '../../../model/model';
 import { AdminService } from '../../../services/admin.service';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-audit-details',
@@ -12,15 +13,16 @@ import { DatePipe } from '@angular/common';
 })
 export class AuditDetailsComponent {
   actions: UserAction[] = [];
-  adminServices = inject(AdminService)
+  adminServices = inject(AdminService);
+  router = inject(Router)
 
   ngOnInit(): void {
     this.auditDetails();
   }
 
-  auditDetails(){
-    this.adminServices.getAuditdetails().subscribe((res:any)=>{
+  auditDetails(): void {
+    this.adminServices.getAuditdetails().subscribe((res: any) => {
       this.actions = res.data;
-    })
+    });
   }
   }

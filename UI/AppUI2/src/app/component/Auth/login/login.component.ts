@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
         }
         else {
           this.miscServices.setCookie('jwtToken', res.data.jwtToken, 60); // 60 minutes
-          this.miscServices.setCookie('refreshToken', res.data.refreshToken, 7); // 7 days
+          this.miscServices.setCookie('refreshToken', res.data.refreshToken, (7 * 24 * 60)); // 7 days
           sessionStorage.setItem('userId', res.data.userId);
           this.router.navigateByUrl('layout');
         }

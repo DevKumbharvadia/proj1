@@ -1,0 +1,59 @@
+<div class="relative overflow-x-auto m-6 sm:rounded-lg">
+  <div
+    class="flex items-center justify-between flex-column md:flex-row flex-wrap space-y-4 md:space-y-0 py-4 bg-[#EEEEEE] border-b-2 border-[#393E46] p-2"
+  >
+  <table
+    class="w-full text-sm text-left text-[#393E46] bg-[#EEEEEE]"
+  >
+    <thead
+      class="text-xs uppercase bg-[#393E46] text-[#EEEEEE]"
+    >
+      <tr>
+        <th class="px-6 py-3">Id</th>
+        <th class="px-6 py-3">Name</th>
+        <th class="px-6 py-3">Quantity</th>
+        <th class="px-6 py-3">Price</th>
+        <th class="px-6 py-3">Customer</th>
+        <th class="px-6 py-3">Address</th>
+        <th class="px-6 py-3">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (product of products; track $index) {
+      <tr
+        class="bg-[#EEEEEE] border-b border-[#393E46] hover:bg-[#77777773]"
+      >
+      <td class="px-6 py-4 font-semibold text-[#222831]">
+        {{ product.productId }}
+      </td>
+        <td class="px-6 py-4 font-semibold text-[#222831]">
+          {{ product.productName }}
+        </td>
+        <td class="px-6 py-4 text-sm truncate w-48">
+          {{ product.quantity }}
+        </td>
+        <td class="px-6 py-4 text-green-600 font-bold">
+          ${{ product.totalAmount }}
+        </td>
+        <td class="px-6 py-4">
+          {{ product.buyer.username }}
+        </td>
+        <td class="px-6 py-4">
+          {{ product.buyer.buyerInfo.address }}
+        </td>
+        <td class="items-center justify-center">
+          <div>
+            <button
+              class="bg-blue-500 text-white py-1 m-2 px-3 rounded hover:bg-blue-600"
+              (click)="shipProduct(product.productId)"
+            >
+              Ship
+            </button>
+          </div>
+        </td>
+
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

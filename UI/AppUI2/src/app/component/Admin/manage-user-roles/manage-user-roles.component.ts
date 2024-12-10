@@ -46,7 +46,7 @@ export class ManageUserRolesComponent implements OnInit {
       .subscribe((res: any) => {
         this.user = res.data;
       });
-      
+
   }
 
   onRoleChange(event: Event, roleId: string) {
@@ -74,7 +74,9 @@ export class ManageUserRolesComponent implements OnInit {
   saveChanges() {
     this.adminServices.rewriteRoles(this.user.userId,this.selectedRoles).subscribe((res:any)=>{
       alert(res.message);
-    })
+      this.router.navigateByUrl("layout/manage-user")
+    });
+
   }
   cancelChanges() {
     this.router.navigateByUrl("layout/manage-user")

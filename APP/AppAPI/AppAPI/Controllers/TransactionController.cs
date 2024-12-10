@@ -67,6 +67,94 @@ namespace AppAPI.Controllers
             });
         }
 
+        [HttpGet("getAllUnshippedTransaction")]
+        public async Task<IActionResult> getAllUnshippedTransaction()
+        {
+            try
+            {
+                // Fetch transactions with detailed information
+                var transactions = await _context.Transactions
+                    .Include(t => t.Product) // Include Product details
+                    .Include(t => t.Buyer)  // Include Buyer details
+                    .Include(t => t.Seller) // Include Seller details
+                    .Where(t => t.ShipingStatus == false) // Filter unshipped transactions
+                    .ToListAsync();
+
+                if (!transactions.Any())
+                {
+                    return Ok(new ApiResponse<object>
+                    {
+                        Success = true,
+                        Message = "No transactions found.",
+                        Data = null
+                    });
+                }
+
+                // New list to hold the updated transaction data
+                var transactionData = new List<object>();
+
+                // Manually add BuyerInfo to each transaction using foreach loop
+                foreach (var transaction in transactions)
+                {
+                    if (transaction.Buyer != null)
+                    {
+                        var buyerInfo = await _context.BuyerInfos
+                            .Where(b => b.UserId == transaction.BuyerId) 
+                            .FirstOrDefaultAsync(); 
+
+
+                        // Create an anonymous object with updated BuyerInfo
+                        var updatedTransaction = new
+                        {
+                            transaction.TransactionId,
+                            transaction.ProductId,
+                            transaction.Quantity,
+                            transaction.TransactionDate,
+                            transaction.TotalAmount,
+                            transaction.ShipingStatus,
+                            ProductName = transaction.Product.ProductName,
+                            Buyer = new
+                            {
+                                transaction.Buyer.UserId,
+                                transaction.Buyer.Username,
+                                BuyerInfo = buyerInfo != null
+                                    ? new
+                                    {
+                                        buyerInfo.ContactNumber,
+                                        buyerInfo.Address
+                                    }
+                                    : null // Handle null BuyerInfo
+                            },
+                            Seller = new
+                            {
+                                transaction.Seller.UserId,
+                                transaction.Seller.Username
+                            }
+                        };
+
+                        // Add the modified transaction to the new list
+                        transactionData.Add(updatedTransaction);
+                    }
+                }
+
+                return Ok(new ApiResponse<object>
+                {
+                    Success = true,
+                    Message = "Unshipped transactions retrieved successfully.",
+                    Data = transactionData
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = $"An error occurred while fetching transactions: {ex.Message}"
+                });
+            }
+        }
+
+
         [HttpGet("getTransactionById")]
         public async Task<IActionResult> GetTransactionById(Guid id)
         {
@@ -191,6 +279,33 @@ namespace AppAPI.Controllers
             });
         }
 
+        // PUT: api/Transactions/UpdateShippingStatus/{id}
+        [HttpPut("ShipItems")]
+        public async Task<IActionResult> UpdateShippingStatus(Guid id)
+        {
+            // Find the transaction by its ID
+            var transaction = await _context.Transactions.FindAsync(id);
+            if (transaction == null)
+            {
+                return NotFound(new { Message = "Transaction not found." });
+            }
+
+            // Update the shipping status
+            transaction.ShipingStatus = true;
+
+            // Save changes to the database
+            try
+            {
+                _context.Transactions.Update(transaction);
+                await _context.SaveChangesAsync();
+                return Ok(new { Message = "Shipping status updated successfully.", transaction });
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while updating the shipping status.", Details = ex.Message });
+            }
+        }
+
         [HttpGet("getTransactionHistory")]
         public async Task<IActionResult> GetTransactionHistory()
         {
@@ -246,7 +361,8 @@ namespace AppAPI.Controllers
                     t.ProductId,
                     t.Quantity,
                     t.TransactionDate,
-                    t.TotalAmount
+                    t.TotalAmount,
+                    t.ShipingStatus
                 })
                 .ToListAsync();
 
@@ -265,7 +381,8 @@ namespace AppAPI.Controllers
                         ProductName = product.ProductName,
                         Quantity = transaction.Quantity,
                         TransactionDate = transaction.TransactionDate,
-                        TotalAmount = transaction.TotalAmount
+                        TotalAmount = transaction.TotalAmount,
+                        ShipingStatus = transaction.ShipingStatus
                     });
                 }
             }

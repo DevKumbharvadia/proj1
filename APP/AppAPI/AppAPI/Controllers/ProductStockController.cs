@@ -26,7 +26,6 @@ namespace AppAPI.Controllers
         {
 
             var stockLogs = await _context.ProductStockLogs
-                .Include(sl => sl.Product) // Assuming StockLogs has a reference to Product
                 .ToListAsync();
 
             if (stockLogs == null || !stockLogs.Any())
@@ -50,11 +49,19 @@ namespace AppAPI.Controllers
         [HttpGet("GetStockLogByProductId")]
         public async Task<IActionResult> GetStockUpdateById(Guid id)
         {
-            var stockLog = await _context.ProductStockLogs
-                .Include(sl => sl.Product) // Assuming StockLogs has a reference to Product
-                .FirstOrDefaultAsync(sl => sl.ProductId == id);
+            var stockLogs = await _context.ProductStockLogs
+                .Where(sl => sl.ProductId == id)
+                .Select(sl => new
+                {
+                    sl.StockLogId,
+                    sl.ProductId,
+                    sl.QuantityChanged,
+                    sl.NewStockLevel,
+                    sl.Timestamp
+                })
+                .ToListAsync();
 
-            if (stockLog == null)
+            if (stockLogs == null || !stockLogs.Any())
             {
                 return Ok(new ApiResponse<object>
                 {
@@ -68,9 +75,10 @@ namespace AppAPI.Controllers
             {
                 Success = true,
                 Message = "Stock log retrieved successfully.",
-                Data = stockLog
+                Data = stockLogs
             });
         }
+
 
         [HttpPost("AddProductStockLog")]
         public async Task<IActionResult> AddProductStockUpdate([FromBody] ProductStockAddRequest stockAddRequest)
@@ -188,60 +196,3 @@ namespace AppAPI.Controllers
         }
     }
 }
-
-
-//using AppAPI.Data;
-//using AppAPI.Models.Domain;
-//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.EntityFrameworkCore;
-//using Sieve.Services;
-
-//namespace AppAPI.Controllers
-//{
-//    [Route("api/[controller]")]
-//    [ApiController]
-//    public class ProductStockController : ControllerBase //ok
-//    {
-//        private readonly ApplicationDbContext _context;
-//        private readonly IWebHostEnvironment _environment;
-//        private readonly SieveProcessor _sieveProcessor;
-
-//        public ProductStockController(ApplicationDbContext context, IWebHostEnvironment environment, SieveProcessor sieveProcessor)
-//        {
-//            _context = context;
-//            _environment = environment;
-//            _sieveProcessor = sieveProcessor;
-//        }
-
-//        [HttpGet("GetAllStockLogs")]
-//        public async Task<ActionResult<IEnumerable<Product>>> GetAllStockUpdates()
-//        {
-//            return Ok();
-//        }
-
-//        [HttpGet("GetStockLogById")]
-//        public async Task<ActionResult<Product>> GetStockUpdateById(Guid id)
-//        {
-//            return Ok();
-//        }
-
-//        [HttpPost("AddProductStockLog")]
-//        public async Task<ActionResult<Product>> AddProductStockUpdate(Product product)
-//        {
-//            return Ok();
-//        }
-
-//        //[HttpPut("UpdateProductStockLog")]
-//        //public async Task<IActionResult> UpdateProductStockUpdate(Guid id, Product product)
-//        //{
-//        //    return Ok();
-//        //}
-
-//        //[HttpDelete("DeleteProductStockLog")]
-//        //public async Task<IActionResult> DeleteProductStockUpdate(Guid id)
-//        //{
-//        //    return Ok();
-//        //}
-//    }
-//}

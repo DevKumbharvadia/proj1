@@ -46,6 +46,7 @@
             routerLinkActive="active"
             class="block py-2 px-3 md:p-0 text-[#00ADB5] rounded md:hover:text-[#EEEEEE]"
             aria-current="page"
+            (click)="AddUserAction('Home')"
             >Home</a
           >
         </li>
@@ -55,6 +56,7 @@
             routerLink="cart"
             routerLinkActive="active"
             class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
+            (click)="AddUserAction('Cart')"
             >Cart</a
           >
         </li>
@@ -64,6 +66,7 @@
             routerLink="profile"
             routerLinkActive="active"
             class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
+            (click)="AddUserAction('Profile')"
             >Profile</a
           >
         </li>
@@ -73,6 +76,7 @@
             routerLink="add-product"
             routerLinkActive="active"
             class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
+            (click)="AddUserAction('Add-Product')"
             >Add Product</a
           >
         </li>
@@ -82,6 +86,7 @@
             routerLink="manage-user"
             routerLinkActive="active"
             class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
+            (click)="AddUserAction('Manage-User')"
             >Manage Uers</a
           >
         </li>
@@ -91,6 +96,7 @@
             routerLink="audit"
             routerLinkActive="active"
             class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
+            (click)="AddUserAction('Audit')"
             >Audit</a
           >
         </li>
@@ -100,6 +106,7 @@
             routerLink="product-list"
             routerLinkActive="active"
             class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
+            (click)="AddUserAction('Product-List')"
             >Product List</a
           >
         </li>
@@ -109,6 +116,7 @@
             routerLink="stats"
             routerLinkActive="active"
             class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
+            (click)="AddUserAction('Retailer-Stats')"
             >Retailer Stats</a
           >
         </li>
@@ -119,6 +127,7 @@
           routerLink="manage-user-roles"
           routerLinkActive="active"
           class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
+          (click)="AddUserAction('Manage-User-Roles')"
           >Manage User Roles</a
         >
       </li>
@@ -129,6 +138,7 @@
           routerLink="manage-all-products"
           routerLinkActive="active"
           class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
+          (click)="AddUserAction('All-Products')"
           >All Products</a
         >
       </li>
@@ -139,6 +149,7 @@
           routerLink="stock-update"
           routerLinkActive="active"
           class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
+          (click)="AddUserAction('Stock-Update')"
           >Stock Update</a
         >
       </li>
@@ -150,6 +161,16 @@
           routerLinkActive="active"
           class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
           >Audit Details</a
+        >
+      </li>
+    } @if (userRoles.includes('seller')) {
+
+      <li>
+        <a
+          routerLink="shiping-request"
+          routerLinkActive="active"
+          class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
+          >Shiping Request</a
         >
       </li>
     }

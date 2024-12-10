@@ -24,12 +24,12 @@ namespace AppAPI.Models.Domain
         [Required]
         public double TotalAmount { get; set; } // Not Null
 
-        public DateTime ShipingDate { get; set; } // Default value
+        public DateTime ShipingDate { get; set; } // Optional
 
         public DateTime TransactionDate { get; set; } = DateTime.UtcNow; // Default value
 
         [Required]
-        public bool ShipingStatus { get; set; } = false; // Default order status
+        public bool ShipingStatus { get; set; } = false; // Default status
 
         public Product Product { get; set; } = null!; // Ensures non-null Product relationship
 

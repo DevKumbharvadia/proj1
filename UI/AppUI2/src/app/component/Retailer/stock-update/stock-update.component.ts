@@ -28,6 +28,7 @@ export class StockUpdateComponent {
     console.log(prod);
     this.productService.addProductStock(prod).subscribe((res:any) =>{
       console.log(res);
+      this.router.navigateByUrl("layout/product-list")
     })
   }
 }

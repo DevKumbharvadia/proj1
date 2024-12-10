@@ -16,6 +16,8 @@ import { ManageAllProductsComponent } from './component/Admin/manage-all-product
 import { ManageUserRolesComponent } from './component/Admin/manage-user-roles/manage-user-roles.component';
 import { StockUpdateComponent } from './component/Retailer/stock-update/stock-update.component';
 import { AuditDetailsComponent } from './component/Admin/audit-details/audit-details.component';
+import { ProductDetailsComponent } from './component/Retailer/product-details/product-details.component';
+import { ShippingRequestComponent } from './component/Retailer/shipping-request/shipping-request.component';
 
 export const routes: Routes = [
   {
@@ -114,7 +116,15 @@ export const routes: Routes = [
       },
       {
         path: 'stock-update',
-        component: StockUpdateComponent
+        component: StockUpdateComponent,
+      },
+      {
+        path: 'product-details',
+        component: ProductDetailsComponent,
+      },
+      {
+        path: 'shiping-request',
+        component: ShippingRequestComponent,
       }
     ],
   },

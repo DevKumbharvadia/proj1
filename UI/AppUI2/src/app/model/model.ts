@@ -106,6 +106,7 @@ export class UserTransaction {
   quantity: number = 0;
   transactionDate: string = '';
   totalAmount: number = 0;
+  shipingStatus: boolean = false;
 }
 
 export class MakePurchase {
@@ -154,4 +155,22 @@ export class UserAction {
   userActionId: string = '';
   action: string = '';
   timeOfAction: Date = new Date();
+}
+
+export class UserActionRequest {
+  userId: string;
+  action: string;
+
+  constructor(userId: string, action: string) {
+    this.userId = userId;
+    this.action = action;
+  }
+}
+
+export class ProductStockLog {
+  stockLogId: string = '';
+  productId: string = '';
+  quantityChanged: number = 0;
+  newStockLevel: number = 0;
+  timestamp: string = '';
 }

@@ -5,19 +5,19 @@
     <!-- User Details -->
     <div class="bg-gray-50 p-4 rounded-lg shadow-sm mb-6">
       <div class="mb-2">
-        <span class="font-bold text-[#00ADB5]">User ID:</span>
+        <span class="font-bold text-[#00ADB5]">User ID: </span>
         <span class="text-gray-700">{{ user.userId }}</span>
       </div>
       <div class="mb-2">
-        <span class="font-bold text-[#00ADB5]">User Name:</span>
+        <span class="font-bold text-[#00ADB5]">User Name: </span>
         <span class="text-gray-700">{{ user.username }}</span>
       </div>
       <div class="mb-2">
-        <span class="font-bold text-[#00ADB5]">Email:</span>
+        <span class="font-bold text-[#00ADB5]">Email: </span>
         <span class="text-gray-700">{{ user.email }}</span>
       </div>
       <div class="mb-2">
-        <span class="font-bold text-[#00ADB5]">Last Login:</span>
+        <span class="font-bold text-[#00ADB5]">Last Login: </span>
         <span class="text-gray-700">{{ user.lastLoginTime | date : "MM/dd/yyyy hh:mm a" }}</span>
       </div>
     </div>
@@ -48,6 +48,7 @@
               <th class="px-6 py-3 border border-gray-300 font-medium text-[#393E46]">Quantity</th>
               <th class="px-6 py-3 border border-gray-300 font-medium text-[#393E46]">Total Amount</th>
               <th class="px-6 py-3 border border-gray-300 font-medium text-[#393E46]">Date</th>
+              <th class="px-6 py-3 border border-gray-300 font-medium text-[#393E46]">Order Status</th>
             </tr>
           </thead>
           <tbody>
@@ -64,6 +65,9 @@
               </td>
               <td class="px-6 py-3 border border-gray-300 text-gray-700">
                 {{ purchase.transactionDate | date : "MM/dd/yyyy hh:mm a" }}
+              </td>
+              <td class="px-6 py-3 border border-gray-300 text-gray-700">
+                {{ purchase.shipingStatus ? 'Out For Delivery' : 'Pending' }}
               </td>
             </tr>
             }

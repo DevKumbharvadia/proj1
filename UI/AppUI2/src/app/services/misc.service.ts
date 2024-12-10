@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment.development';
 import { Constant } from '../constant/constant';
+import { UserActionRequest } from '../model/model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,5 +29,10 @@ export class MiscService {
 
   loadSalesData(){
     return this.http.get(environment.API_URl + Constant.API_METHOD.SELLER.SALES_DATA_BY_ID + `?sellerId=${sessionStorage.getItem('userId')}`);
+  }
+
+  AddUserAction(Action: string){
+    var UA: UserActionRequest = new UserActionRequest(sessionStorage.getItem('userId')??'',Action);
+    return this.http.post(environment.API_URl + Constant.API_METHOD.USER_ACTION.ADD_ACTION,UA);
   }
 }

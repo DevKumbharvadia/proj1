@@ -79,7 +79,7 @@ namespace AppAPI.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("AddAction")]
         public async Task<IActionResult> CreateUserAction([FromBody] UserActionRequest userAction)
         {
             if (!ModelState.IsValid)
@@ -87,18 +87,24 @@ namespace AppAPI.Controllers
 
             try
             {
-                // Check if the referenced UserAudit exists
-                var userAuditExists = await _context.UserAudits.AnyAsync(ua => ua.UserAuditId == userAction.UserAuditId);
-                if (!userAuditExists)
-                    return NotFound(new { Message = "Referenced UserAudit not found", Success = false });
+                // Find the most recent UserAudit for the given UserId
+                var userAudit = await _context.UserAudits
+                    .Where(ua => ua.UserId == userAction.UserId && ua.LogoutTime == null)
+                    .OrderByDescending(ua => ua.LoginTime)
+                    .FirstOrDefaultAsync();
 
+                if (userAudit == null)
+                    return NotFound(new { Message = "No active UserAudit found for the user", Success = false });
+
+                // Create the new UserAction
                 _context.UserActions.Add(new UserAction
                 {
                     UserActionId = Guid.NewGuid(),
-                    UserAuditId = userAction.UserAuditId,
+                    UserAuditId = userAudit.UserAuditId, // Use the found UserAuditId
                     TimeOfAction = DateTime.UtcNow,
                     Action = userAction.Action
                 });
+
                 await _context.SaveChangesAsync();
 
                 return Ok(new ApiResponse<UserAction>
@@ -113,6 +119,8 @@ namespace AppAPI.Controllers
                 return StatusCode(500, new { Message = $"Internal server error: {ex.Message}", Success = false });
             }
         }
+
+
     }
 }
 

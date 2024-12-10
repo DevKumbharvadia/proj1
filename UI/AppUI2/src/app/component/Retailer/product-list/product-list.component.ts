@@ -12,42 +12,53 @@ import { filter } from 'rxjs';
   styleUrl: './product-list.component.css',
 })
 export class ProductListComponent implements OnInit {
-
   products: Product[] = [];
   router = inject(Router);
   productService = inject(ProductService);
   filter = new Filter();
-currentPage: any;
-totalPages: any;
+  currentPage: any;
+  totalPages: any;
+
 
   ngOnInit(): void {
     this.getSortedProductsBySellerId();
   }
 
-  nextPage() {
-    this.filter.Page+=1;
-    this.productService.getSortedProductsBySellerId(this.filter).subscribe((res: any) => {
-      this.products = res.data.result;
-      this.currentPage = res.data.currentPage;
-      this.totalPages = res.data.totalPages;
-    });
-    }
+  onProductDetails(Id: string) {
+    this.productService.productDetailsId = Id;
+    this.router.navigateByUrl("layout/product-details");
+  }
 
-    previousPage() {
-      this.filter.Page-=1;
-      this.productService.getSortedProductsBySellerId(this.filter).subscribe((res: any) => {
+  nextPage() {
+    this.filter.Page += 1;
+    this.productService
+      .getSortedProductsBySellerId(this.filter)
+      .subscribe((res: any) => {
         this.products = res.data.result;
         this.currentPage = res.data.currentPage;
         this.totalPages = res.data.totalPages;
       });
-      }
+  }
 
-      getSortedProductsBySellerId() {
-    this.productService.getSortedProductsBySellerId(this.filter).subscribe((res: any) => {
-      this.products = res.data.result;
-      this.currentPage = res.data.currentPage;
-      this.totalPages = res.data.totalPages;
-    });
+  previousPage() {
+    this.filter.Page -= 1;
+    this.productService
+      .getSortedProductsBySellerId(this.filter)
+      .subscribe((res: any) => {
+        this.products = res.data.result;
+        this.currentPage = res.data.currentPage;
+        this.totalPages = res.data.totalPages;
+      });
+  }
+
+  getSortedProductsBySellerId() {
+    this.productService
+      .getSortedProductsBySellerId(this.filter)
+      .subscribe((res: any) => {
+        this.products = res.data.result;
+        this.currentPage = res.data.currentPage;
+        this.totalPages = res.data.totalPages;
+      });
   }
 
   editProduct(productId: string): void {

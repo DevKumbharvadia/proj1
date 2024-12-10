@@ -17,14 +17,12 @@ namespace AppAPI.Models.Domain
         [Required]
         public string PasswordHash { get; set; } = null!;
 
-        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>(); //ok
+        public BuyerInfo? BuyerInfo { get; set; } // Navigation property for BuyerInfo (optional)
 
-        public ICollection<Product> Products { get; set; } = new List<Product>(); //ok
-
-        public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>(); //ok
-
-        public ICollection<UserAudit> UserAudits { get; set; } = new List<UserAudit>(); //ok
-
-        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>(); //ok
+        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public ICollection<Product> Products { get; set; } = new List<Product>();
+        public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+        public ICollection<UserAudit> UserAudits { get; set; } = new List<UserAudit>();
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 }

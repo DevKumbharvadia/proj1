@@ -89,6 +89,43 @@ namespace AppAPI.Controllers
             });
         }
 
+        [HttpGet("GetProductDetailsById")]
+        public async Task<IActionResult> GetProductDetailsById(Guid id)
+        {
+            var product = await _context.Products
+                .Where(p => p.ProductId == id)
+                .Select(p => new
+                {
+                    p.ProductId,
+                    p.ProductName,
+                    p.Description,
+                    p.ImageContent,
+                    p.Price,
+                    p.StockQuantity,
+                    p.SellerId,
+                    p.CreatedAt,
+                    p.UpdatedAt
+                })
+                .FirstOrDefaultAsync();
+
+            if (product == null)
+            {
+                return Ok(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = "Product not found.",
+                    Data = null
+                });
+            }
+
+            return Ok(new ApiResponse<object>
+            {
+                Success = true,
+                Message = "Product retrieved successfully.",
+                Data = product
+            });
+        }
+
         [HttpPost("AddProduct")]
         public async Task<IActionResult> AddProduct([FromForm] ProductUploadDTO productDto)
         {
