@@ -32,6 +32,29 @@ namespace AppAPI.Controllers
             });
         }
 
+        [HttpGet("BuyerInfoExist")]
+        public async Task<IActionResult> BuyerInfoExist(Guid id)
+        {
+            // Check if the BuyerInfo exists for the given user ID
+            bool exists = await _context.BuyerInfos.AnyAsync(b => b.UserId == id);
+
+            // Check if the user has the admin role
+            bool isAdmin = await _context.UserRoles
+                .Include(ur => ur.Role)
+                .AnyAsync(ur => ur.UserId == id && ur.Role.RoleName == "admin");
+
+            bool data = exists || isAdmin;
+
+            // Return response
+            return Ok(new ApiResponse<bool>
+            {
+                Message = exists ? "Buyer info exists." : "Buyer info does not exist.",
+                Success = true,
+                Data = data
+            });
+        }
+
+
         [HttpPost("AddBuyerInfo")]
         public async Task<IActionResult> AddBuyerInfo([FromForm] BuyerInfoRequest buyerInfoRequest)
         {

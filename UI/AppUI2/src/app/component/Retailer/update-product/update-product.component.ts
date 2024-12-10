@@ -1,7 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ProductService } from '../../../services/product.service';
 import { FormsModule } from '@angular/forms';
-import { routes } from '../../../app.routes';
 import { Router } from '@angular/router';
 
 @Component({

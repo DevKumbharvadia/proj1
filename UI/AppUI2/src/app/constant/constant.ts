@@ -14,7 +14,8 @@ export const Constant = {
         BUYER_INFO: {
             GET_BUYER_INFO: '/api/BuyerInfo/GetBuyerInfo',
             ADD_BUYER_INFO: '/api/BuyerInfo/AddBuyerInfo',
-            UPDATE_BUYER_INFO: '/api/BuyerInfo/UpdateBuyerInfo'
+            UPDATE_BUYER_INFO: '/api/BuyerInfo/UpdateBuyerInfo',
+            BUYER_INFO_EXIST: '/api/BuyerInfo/BuyerInfoExist',
         },
         PRODUCT: {
             GET_ALL: '/api/Product/GetAllProducts',

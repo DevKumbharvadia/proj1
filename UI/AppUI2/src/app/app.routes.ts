@@ -18,6 +18,7 @@ import { StockUpdateComponent } from './component/Retailer/stock-update/stock-up
 import { AuditDetailsComponent } from './component/Admin/audit-details/audit-details.component';
 import { ProductDetailsComponent } from './component/Retailer/product-details/product-details.component';
 import { ShippingRequestComponent } from './component/Retailer/shipping-request/shipping-request.component';
+import { AddBuyerInfoComponent } from './component/Auth/add-buyer-info/add-buyer-info.component';
 
 export const routes: Routes = [
   {
@@ -33,19 +34,8 @@ export const routes: Routes = [
     component: RegisterComponent,
   },
   {
-    path: 'layout',
-    component: LayoutComponent,
-    canActivate: [authGuard],
-    children: [
-      {
-        path: 'login',
-        component: LoginComponent,
-      },
-      {
-        path: 'register',
-        component: RegisterComponent,
-      },
-    ],
+    path: 'add-buyer-info',
+    component: AddBuyerInfoComponent
   },
   {
     path: 'layout',

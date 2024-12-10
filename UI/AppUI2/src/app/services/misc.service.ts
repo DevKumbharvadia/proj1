@@ -22,12 +22,20 @@ export class MiscService {
     document.cookie = `${name}=${value}; ${expires}; path=/`;
   }
 
+  buyerInfoExist(): Observable<any>{
+    return this.http.get(environment.API_URl + Constant.API_METHOD.BUYER_INFO.BUYER_INFO_EXIST+"?Id="+sessionStorage.getItem('userId'));
+  }
+
+  setBuyerInfo(Data: FormData):  Observable<any>{
+    return this.http.post(environment.API_URl + Constant.API_METHOD.BUYER_INFO.ADD_BUYER_INFO, Data);
+  }
+
   getUserRoles():  Observable<any>{
     var Id: string = sessionStorage.getItem('userId') ?? '';
     return this.http.get(environment.API_URl + Constant.API_METHOD.ROLE.GET_BY_ID + "?userId=" + `${Id}`);
   }
 
-  loadSalesData(){
+  loadSalesData():  Observable<any>{
     return this.http.get(environment.API_URl + Constant.API_METHOD.SELLER.SALES_DATA_BY_ID + `?sellerId=${sessionStorage.getItem('userId')}`);
   }
 

@@ -2,6 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ProductService } from '../../../services/product.service';
 import { CartItem, MakePurchase, Product } from '../../../model/model';
 import { CartService } from '../../../services/cart.service';
+import { MiscService } from '../../../services/misc.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -14,9 +16,22 @@ export class CartComponent implements OnInit {
   cartService = inject(CartService);
   productService = inject(ProductService);
   cartItems: CartItem[] = [];
+  miscServices = inject(MiscService);
+  router = inject(Router);
 
   ngOnInit(): void {
     this.loadAndUpdateCartData();
+  }
+
+  buyerInfoExist(){
+    debugger
+    this.miscServices.buyerInfoExist().subscribe((res:any)=>{
+      if (!res.data) {
+        this.router.navigateByUrl("add-buyer-info");
+      } else {
+        this.router.navigateByUrl("layout/cart");
+      }
+    })
   }
 
   loadAndUpdateCartData() {
@@ -157,8 +172,10 @@ export class CartComponent implements OnInit {
       }
 
       this.makePurchase(item.productId, userId, item.cartQuantity);
+
     });
 
+    this.buyerInfoExist();
     this.cartClear();
   }
 

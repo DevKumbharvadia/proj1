@@ -1,11 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Role } from '../../../model/model';
 import { AuthService } from '../../../services/auth.service';
-<<<<<<< HEAD
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-=======
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
->>>>>>> 2dea865bfa7d792921f0503f7acdf1ce39b6c6f7
 import { AdminService } from '../../../services/admin.service';
 import { Router } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
@@ -23,7 +19,6 @@ export class RegisterComponent implements OnInit {
   roles: Role[] = [];
   router = inject(Router)
 
-<<<<<<< HEAD
   registerForm = new FormGroup(
     {
       username: new FormControl('', [
@@ -40,15 +35,6 @@ export class RegisterComponent implements OnInit {
       roleId: new FormControl('', Validators.required),
     },
   );
-=======
-  registerForm = new FormGroup({
-    username: new FormControl(),
-    password: new FormControl(),
-    confirmPassword: new FormControl(),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    roleId: new FormControl(),
-  });
->>>>>>> 2dea865bfa7d792921f0503f7acdf1ce39b6c6f7
 
   ngOnInit(): void {
     this.loadRoles();
@@ -87,13 +73,8 @@ export class RegisterComponent implements OnInit {
 
     this.authService
       .onRegister(
-<<<<<<< HEAD
         this.registerForm.get('username')?.value ?? '',
         this.registerForm.get('password')?.value ?? '',
-=======
-        this.registerForm.get('username')?.value,
-        this.registerForm.get('password')?.value,
->>>>>>> 2dea865bfa7d792921f0503f7acdf1ce39b6c6f7
         this.registerForm.get('email')?.value ?? ''
       )
       .subscribe(
@@ -111,7 +92,7 @@ export class RegisterComponent implements OnInit {
               (roleRes: any) => {
                 console.log('Role assigned:', roleRes);
                 alert('Registration and role assignment successful!');
-                this.router.navigateByUrl('login'); // Navigate only after success
+                this.router.navigateByUrl('login');
               },
               (error) => {
                 console.error('Error during role assignment:', error);

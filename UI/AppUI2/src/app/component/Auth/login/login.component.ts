@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
       (res: any) => {
         if(res.success == false){
           alert(res.message)
+          return;
         }
         else {
           this.miscServices.setCookie('jwtToken', res.data.jwtToken, 60); // 60 minutes
