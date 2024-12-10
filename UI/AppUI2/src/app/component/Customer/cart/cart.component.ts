@@ -25,13 +25,17 @@ export class CartComponent implements OnInit {
 
   buyerInfoExist(){
     debugger
+    var data: Boolean = false;
     this.miscServices.buyerInfoExist().subscribe((res:any)=>{
       if (!res.data) {
         this.router.navigateByUrl("add-buyer-info");
+        this.cartClear();
       } else {
         this.router.navigateByUrl("layout/cart");
       }
+      data =  res.data
     })
+    return data
   }
 
   loadAndUpdateCartData() {

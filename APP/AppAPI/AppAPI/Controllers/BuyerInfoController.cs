@@ -38,12 +38,7 @@ namespace AppAPI.Controllers
             // Check if the BuyerInfo exists for the given user ID
             bool exists = await _context.BuyerInfos.AnyAsync(b => b.UserId == id);
 
-            // Check if the user has the admin role
-            bool isAdmin = await _context.UserRoles
-                .Include(ur => ur.Role)
-                .AnyAsync(ur => ur.UserId == id && ur.Role.RoleName == "admin");
-
-            bool data = exists || isAdmin;
+            bool data = exists;
 
             // Return response
             return Ok(new ApiResponse<bool>

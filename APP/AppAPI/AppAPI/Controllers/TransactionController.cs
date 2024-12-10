@@ -90,51 +90,50 @@ namespace AppAPI.Controllers
                     });
                 }
 
+                // Fetch all buyer info at once to avoid multiple queries inside the loop
+                var buyerInfos = await _context.BuyerInfos
+                    .Where(b => transactions.Select(t => t.BuyerId).Contains(b.UserId))
+                    .ToListAsync();
+
                 // New list to hold the updated transaction data
                 var transactionData = new List<object>();
 
                 // Manually add BuyerInfo to each transaction using foreach loop
                 foreach (var transaction in transactions)
                 {
-                    if (transaction.Buyer != null)
+                    var buyerInfo = buyerInfos.FirstOrDefault(b => b.UserId == transaction.BuyerId);
+
+                    // Create an anonymous object with updated BuyerInfo
+                    var updatedTransaction = new
                     {
-                        var buyerInfo = await _context.BuyerInfos
-                            .Where(b => b.UserId == transaction.BuyerId) 
-                            .FirstOrDefaultAsync(); 
-
-
-                        // Create an anonymous object with updated BuyerInfo
-                        var updatedTransaction = new
+                        transaction.TransactionId,
+                        transaction.ProductId,
+                        transaction.Quantity,
+                        transaction.TransactionDate,
+                        transaction.TotalAmount,
+                        transaction.ShipingStatus,
+                        ProductName = transaction.Product.ProductName,
+                        Buyer = new
                         {
-                            transaction.TransactionId,
-                            transaction.ProductId,
-                            transaction.Quantity,
-                            transaction.TransactionDate,
-                            transaction.TotalAmount,
-                            transaction.ShipingStatus,
-                            ProductName = transaction.Product.ProductName,
-                            Buyer = new
-                            {
-                                transaction.Buyer.UserId,
-                                transaction.Buyer.Username,
-                                BuyerInfo = buyerInfo != null
-                                    ? new
-                                    {
-                                        buyerInfo.ContactNumber,
-                                        buyerInfo.Address
-                                    }
-                                    : null // Handle null BuyerInfo
-                            },
-                            Seller = new
-                            {
-                                transaction.Seller.UserId,
-                                transaction.Seller.Username
-                            }
-                        };
+                            transaction.Buyer.UserId,
+                            transaction.Buyer.Username,
+                            BuyerInfo = buyerInfo != null
+                                ? new
+                                {
+                                    buyerInfo.ContactNumber,
+                                    buyerInfo.Address
+                                }
+                                : null // Handle null BuyerInfo
+                        },
+                        Seller = new
+                        {
+                            transaction.Seller.UserId,
+                            transaction.Seller.Username
+                        }
+                    };
 
-                        // Add the modified transaction to the new list
-                        transactionData.Add(updatedTransaction);
-                    }
+                    // Add the modified transaction to the new list
+                    transactionData.Add(updatedTransaction);
                 }
 
                 return Ok(new ApiResponse<object>
@@ -153,7 +152,6 @@ namespace AppAPI.Controllers
                 });
             }
         }
-
 
         [HttpGet("getTransactionById")]
         public async Task<IActionResult> GetTransactionById(Guid id)
