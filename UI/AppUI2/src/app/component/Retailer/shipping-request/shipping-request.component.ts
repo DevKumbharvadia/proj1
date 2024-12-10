@@ -24,7 +24,9 @@ export class ShippingRequestComponent {
   }
 
   shipProduct(Id: string) {
-this.productService.shipProduct(Id).subscribe();
+    this.productService.shipProduct(Id).subscribe((res:any)=>{
+      this.getPendingOrders();
+    });
   }
 
   getPendingOrders(){

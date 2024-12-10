@@ -14,7 +14,6 @@
         <th class="px-6 py-3">Quantity</th>
         <th class="px-6 py-3">Price</th>
         <th class="px-6 py-3">Customer</th>
-        <th class="px-6 py-3">Address</th>
         <th class="px-6 py-3">Actions</th>
       </tr>
     </thead>
@@ -38,14 +37,11 @@
         <td class="px-6 py-4">
           {{ product.buyer.username }}
         </td>
-        <td class="px-6 py-4">
-          {{ product.buyer.buyerInfo.address }}
-        </td>
         <td class="items-center justify-center">
           <div>
             <button
               class="bg-blue-500 text-white py-1 m-2 px-3 rounded hover:bg-blue-600"
-              (click)="shipProduct(product.productId)"
+              (click)="shipProduct(product.transactionId)"
             >
               Ship
             </button>

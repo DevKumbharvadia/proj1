@@ -65,6 +65,11 @@ export class UpdateProductComponent implements OnInit {
 
   onUpdate(): void {
 
+    if(this.product.price < 0){
+      alert("Price Must Be Greater Than 0");
+      return;
+    }
+
     const formData = new FormData();
     formData.append('productName', this.product.productName);
     formData.append('price', this.product.price.toString());

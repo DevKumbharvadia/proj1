@@ -280,7 +280,7 @@ namespace AppAPI.Controllers
         }
 
         // PUT: api/Transactions/UpdateShippingStatus/{id}
-        [HttpPut("ShipItems")]
+        [HttpPost("ShipItems")]
         public async Task<IActionResult> UpdateShippingStatus(Guid id)
         {
             // Find the transaction by its ID

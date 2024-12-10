@@ -30,7 +30,12 @@
                 [(ngModel)]="quantityToAdd"
             />
         </div>
-
+        <div class="mb-6 text-red-500" >
+          @if (!selectedProductId || quantityToAdd <= 0)
+          {
+            Stock Quantiy need to be greater than Zero
+          }
+        </div>
         <!-- Actions -->
         <div class="flex justify-end gap-4">
             <button
@@ -41,7 +46,7 @@
                 Cancel
             </button>
             <button
-                class="px-6 py-2 bg-[#00ADB5] text-white font-medium rounded-md hover:bg-[#007B84] focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
+                class="px-6 py-2 disabled:bg-red-500 bg-[#00ADB5] text-white font-medium rounded-md hover:bg-[#007B84] focus:outline-none focus:ring-2 focus:ring-[#00ADB5]"
                 type="button"
                 [disabled]="!selectedProductId || quantityToAdd <= 0"
                 (click)="updateStock()"

@@ -11,7 +11,7 @@
       class="block py-2.5 px-0 w-full text-sm text-[#393E46] bg-transparent border-0 border-b-2 border-[#393E46] appearance-none focus:outline-none focus:ring-0 focus:border-[#00ADB5] peer"
       placeholder=" "
       required
-    />    
+    />
       <label
         for="productName"
         class="peer-focus:font-medium absolute text-sm text-[#393E46] duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-[#00ADB5] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
@@ -56,7 +56,7 @@
     <div class="relative z-0 w-full my-7 group">
       <input
         type="number"
-        step="0.01"
+        step="1"
         name="price"
         id="price"
         [(ngModel)]="product.price"
@@ -74,14 +74,15 @@
 
     <div class="relative z-0 w-full my-7 group">
       <input
-        type="number"
-        name="stockQuantity"
-        id="stockQuantity"
-        [(ngModel)]="product.stockQuantity"
-        class="block py-2.5 px-0 w-full text-sm text-[#393E46] bg-transparent border-0 border-b-2 border-[#393E46] appearance-none focus:outline-none focus:ring-0 focus:border-[#00ADB5] peer"
-        placeholder=" "
-        required
-      />
+      type="number"
+      name="stockQuantity"
+      id="stockQuantity"
+      [(ngModel)]="product.stockQuantity"
+      class="block py-2.5 px-0 w-full text-sm text-[#393E46] bg-transparent border-0 border-b-2 border-[#393E46] appearance-none focus:outline-none focus:ring-0 focus:border-[#00ADB5] peer"
+      placeholder=" "
+      min="1"
+      required
+    />
       <label
         for="stockQuantity"
         class="peer-focus:font-medium absolute text-sm text-[#393E46] duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:text-[#00ADB5] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"

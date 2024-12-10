@@ -17,7 +17,7 @@ export class ProductService {
   productDetailsId: string = '';
 
   shipProduct(Id: string){
-    return this.http.patch(environment.API_URl+Constant.API_METHOD.TRANSACTION.SHIP_PRODUCT+"?id="+Id,{})
+    return this.http.post(environment.API_URl+Constant.API_METHOD.TRANSACTION.SHIP_PRODUCT+"?id="+Id,{})
   }
 
   getStockLogs() {

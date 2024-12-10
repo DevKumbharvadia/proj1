@@ -124,43 +124,11 @@
 
       <li>
         <a
-          routerLink="manage-user-roles"
-          routerLinkActive="active"
-          class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
-          (click)="AddUserAction('Manage-User-Roles')"
-          >Manage User Roles</a
-        >
-      </li>
-    } @if (userRoles.includes('admin')) {
-
-      <li>
-        <a
           routerLink="manage-all-products"
           routerLinkActive="active"
           class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
           (click)="AddUserAction('All-Products')"
           >All Products</a
-        >
-      </li>
-    } @if (userRoles.includes('seller')) {
-
-      <li>
-        <a
-          routerLink="stock-update"
-          routerLinkActive="active"
-          class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
-          (click)="AddUserAction('Stock-Update')"
-          >Stock Update</a
-        >
-      </li>
-    } @if (userRoles.includes('admin')) {
-
-      <li>
-        <a
-          routerLink="audit-details"
-          routerLinkActive="active"
-          class="block py-2 px-3 md:p-0 text-[#EEEEEE] rounded hover:bg-[#393E46] md:hover:bg-transparent md:hover:text-[#00ADB5]"
-          >Audit Details</a
         >
       </li>
     } @if (userRoles.includes('seller')) {

@@ -24,6 +24,12 @@
       >
         Username
       </label>
+      <!-- Validation Feedback -->
+      <div *ngIf="username?.touched && username?.invalid" class="text-red-500 text-xs mt-1">
+        <small *ngIf="username?.hasError('required')">Username is required.</small>
+        <small *ngIf="username?.hasError('minlength')">Username must be at least 3 characters long.</small>
+        <small *ngIf="username?.hasError('pattern')">Username cannot contain spaces.</small>
+      </div>
     </div>
 
     <!-- Email Input -->
@@ -43,6 +49,11 @@
       >
         Email
       </label>
+      <!-- Validation Feedback -->
+      <div *ngIf="email?.touched && email?.invalid" class="text-red-500 text-xs mt-1">
+        <small *ngIf="email?.hasError('required')">Email is required.</small>
+        <small *ngIf="email?.hasError('email')">Invalid email format.</small>
+      </div>
     </div>
 
     <!-- Password Input -->
@@ -62,6 +73,11 @@
       >
         Password
       </label>
+      <!-- Validation Feedback -->
+      <div *ngIf="password?.touched && password?.invalid" class="text-red-500 text-xs mt-1">
+        <small *ngIf="password?.hasError('required')">Password is required.</small>
+        <small *ngIf="password?.hasError('minlength')">Password must be at least 6 characters long.</small>
+      </div>
     </div>
 
     <!-- Confirm Password Input -->
@@ -81,6 +97,11 @@
       >
         Confirm Password
       </label>
+      <!-- Validation Feedback -->
+      <div *ngIf="confirmPassword?.touched && confirmPassword?.invalid" class="text-red-500 text-xs mt-1">
+        <small *ngIf="confirmPassword?.hasError('required')">Confirm Password is required.</small>
+        <small *ngIf="registerForm.hasError('mismatch') && confirmPassword?.touched">Passwords do not match.</small>
+      </div>
     </div>
 
     <!-- Role Dropdown -->
@@ -92,6 +113,7 @@
         required
         formControlName="roleId"
       >
+        <option value="" disabled>Select Role</option>
         @for (role of roles; track $index)
         {
         <option [value]="role.roleId">{{ role.roleName }}</option>
@@ -103,6 +125,10 @@
       >
         Role
       </label>
+      <!-- Validation Feedback -->
+      <div *ngIf="roleId?.touched && roleId?.invalid" class="text-red-500 text-xs mt-1">
+        <small *ngIf="roleId?.hasError('required')">Role is required.</small>
+      </div>
     </div>
 
     <!-- Submit Button -->
