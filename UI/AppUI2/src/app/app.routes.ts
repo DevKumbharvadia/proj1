@@ -35,7 +35,7 @@ export const routes: Routes = [
   {
     path: 'layout',
     component: LayoutComponent,
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [
       {
         path: 'login',
@@ -50,7 +50,7 @@ export const routes: Routes = [
   {
     path: 'layout',
     component: LayoutComponent,
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [
       {
         path: 'home',
@@ -69,7 +69,7 @@ export const routes: Routes = [
   {
     path: 'layout',
     component: LayoutComponent,
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [
       {
         path: 'audit',
@@ -96,7 +96,7 @@ export const routes: Routes = [
   {
     path: 'layout',
     component: LayoutComponent,
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [
       {
         path: 'add-product',
