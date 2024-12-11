@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241128091947_sm")]
-    partial class sm
+    [Migration("20241210181301_fm")]
+    partial class fm
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,9 +57,16 @@ namespace AppAPI.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("UserId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("BuyerInfoId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1")
+                        .IsUnique()
+                        .HasFilter("[UserId1] IS NOT NULL");
 
                     b.ToTable("BuyerInfos");
                 });
@@ -341,6 +348,10 @@ namespace AppAPI.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("AppAPI.Models.Domain.User", null)
+                        .WithOne("BuyerInfo")
+                        .HasForeignKey("AppAPI.Models.Domain.BuyerInfo", "UserId1");
+
                     b.Navigation("User");
                 });
 
@@ -468,6 +479,8 @@ namespace AppAPI.Migrations
 
             modelBuilder.Entity("AppAPI.Models.Domain.User", b =>
                 {
+                    b.Navigation("BuyerInfo");
+
                     b.Navigation("Products");
 
                     b.Navigation("RefreshTokens");

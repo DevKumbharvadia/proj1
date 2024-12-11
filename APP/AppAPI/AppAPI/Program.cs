@@ -1,4 +1,5 @@
 using AppAPI.Data;
+using AppAPI.Models.Domain;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -77,6 +78,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationDbContext>();
+
+    // Seed the database
+    SeedDatabase(context);
+}
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
@@ -86,3 +96,16 @@ app.UseCors();
 app.MapControllers();
 
 app.Run();
+
+void SeedDatabase(ApplicationDbContext context)
+{
+    if (!context.Roles.Any())
+    {
+        context.Roles.AddRange(
+            new Role { RoleId = Guid.NewGuid(), RoleName = "buyer" },
+            new Role { RoleId = Guid.NewGuid(), RoleName = "seller" },
+            new Role { RoleId = Guid.NewGuid(), RoleName = "admin" }
+        );
+        context.SaveChanges();
+    }
+}

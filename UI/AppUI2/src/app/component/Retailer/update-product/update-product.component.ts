@@ -63,8 +63,7 @@ export class UpdateProductComponent implements OnInit {
   }
 
   onUpdate(): void {
-
-    if(this.product.price < 0){
+    if (this.product.price < 0) {
       alert("Price Must Be Greater Than 0");
       return;
     }
@@ -77,20 +76,14 @@ export class UpdateProductComponent implements OnInit {
 
     if (this.product.image) {
       formData.append('file', this.product.image, this.product.image.name);
-      this.submitForm(formData);
-    } else if (this.imageData) {
-      this.base64ToFile(this.imageData, 'product-image.jpg')
-        .then((file) => {
-          formData.append('file', file);
-          this.submitForm(formData);
-        })
-        .catch((error) => {
-          console.error('Error converting image data to file:', error);
-        });
+      console.log("File selected, submitting...");
     } else {
-      console.error('No image data available for submission.');
+      console.log("No file selected, submitting null.");
     }
+
+    this.submitForm(formData);
   }
+
 
   submitForm(formData: FormData): void {
     this.productService.updateProduct(this.prodId, formData).subscribe(

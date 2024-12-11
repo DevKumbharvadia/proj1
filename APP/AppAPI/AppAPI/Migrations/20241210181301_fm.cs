@@ -62,7 +62,8 @@ namespace AppAPI.Migrations
                     BuyerInfoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ContactNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,6 +74,11 @@ namespace AppAPI.Migrations
                         principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_BuyerInfos_Users_UserId1",
+                        column: x => x.UserId1,
+                        principalTable: "Users",
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -218,7 +224,7 @@ namespace AppAPI.Migrations
                     TotalAmount = table.Column<double>(type: "float", nullable: false),
                     ShipingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OrderStatus = table.Column<bool>(type: "bit", nullable: false)
+                    ShipingStatus = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -272,6 +278,13 @@ namespace AppAPI.Migrations
                 name: "IX_BuyerInfos_UserId",
                 table: "BuyerInfos",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BuyerInfos_UserId1",
+                table: "BuyerInfos",
+                column: "UserId1",
+                unique: true,
+                filter: "[UserId1] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeletedProducts_ProductId",

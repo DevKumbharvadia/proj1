@@ -62,7 +62,6 @@ namespace AppAPI.Controllers
 
             var products = await productQuery
                 .OrderBy(p => p.ProductId)
-                .Skip((page - 1) * pageSize) // Correct skip calculation
                 .Take(pageSize)
                 .ToListAsync();
 
@@ -132,7 +131,6 @@ namespace AppAPI.Controllers
 
             var products = await productQuery
                 .OrderBy(p => p.ProductId)
-                .Skip((page - 1) * pageSize) // Correct skip calculation
                 .Take(pageSize)
                 .ToListAsync();
 

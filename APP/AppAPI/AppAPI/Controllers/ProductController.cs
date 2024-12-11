@@ -171,13 +171,16 @@ namespace AppAPI.Controllers
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null)
+            {
                 return Ok(new ApiResponse<object>
                 {
                     Success = false,
                     Message = "Product not found.",
                     Data = null
                 });
+            }
 
+            // Update fields if they are provided
             if (!string.IsNullOrEmpty(productDto.ProductName))
             {
                 product.ProductName = productDto.ProductName;
@@ -200,6 +203,7 @@ namespace AppAPI.Controllers
 
             product.UpdatedAt = DateTime.UtcNow;
 
+            // Handle file upload only if a new file is provided
             if (productDto.File != null && productDto.File.Length > 0)
             {
                 try
@@ -207,7 +211,7 @@ namespace AppAPI.Controllers
                     using (var memoryStream = new MemoryStream())
                     {
                         await productDto.File.CopyToAsync(memoryStream);
-                        product.ImageContent = memoryStream.ToArray();
+                        product.ImageContent = memoryStream.ToArray(); // Replace the old image with the new one
                     }
                 }
                 catch (Exception ex)
@@ -219,7 +223,7 @@ namespace AppAPI.Controllers
                         Data = new { error = ex.Message }
                     });
                 }
-            }
+            }   
 
             await _context.SaveChangesAsync();
 
@@ -230,6 +234,7 @@ namespace AppAPI.Controllers
                 Data = product
             });
         }
+
 
         [HttpDelete("DeleteProduct")]
         public async Task<IActionResult> DeleteProduct(Guid id)
