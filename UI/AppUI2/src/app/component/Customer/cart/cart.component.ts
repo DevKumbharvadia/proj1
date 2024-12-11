@@ -24,12 +24,12 @@ export class CartComponent implements OnInit {
   }
 
   buyerInfoExist(){
-    debugger
     var data: Boolean = false;
     this.miscServices.buyerInfoExist().subscribe((res:any)=>{
       if (!res.data) {
         this.router.navigateByUrl("add-buyer-info");
-        this.cartClear();
+        this.cartItems = [];
+        sessionStorage.removeItem('cart');
       } else {
         this.router.navigateByUrl("layout/cart");
       }
@@ -179,7 +179,6 @@ export class CartComponent implements OnInit {
 
     });
 
-    this.buyerInfoExist();
     this.cartClear();
   }
 

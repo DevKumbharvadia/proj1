@@ -51,6 +51,7 @@ export class AddBuyerInfoComponent implements OnInit {
   // }
 
   onContactSubmit(): void {
+    sessionStorage.removeItem('cart');
     if (this.contactForm.valid) {
       const formData = new FormData();
       const contactData = this.contactForm.value;
@@ -62,6 +63,7 @@ export class AddBuyerInfoComponent implements OnInit {
         (res: any) => {
           console.log('Form submission successful:', res);
           alert(res.message);
+          sessionStorage.removeItem('cart');
           this.router.navigateByUrl("layout/cart");
         }
       );
