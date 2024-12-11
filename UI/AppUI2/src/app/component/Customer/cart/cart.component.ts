@@ -34,7 +34,10 @@ export class CartComponent implements OnInit {
         this.router.navigateByUrl("layout/cart");
       }
       data =  res.data
+      this.cartItems = [];
+      sessionStorage.removeItem('cart');
     })
+
     return data
   }
 
@@ -157,6 +160,7 @@ export class CartComponent implements OnInit {
   }
 
   checkout() {
+    this.buyerInfoExist();
     const userId = sessionStorage.getItem('userId');
     if (!userId) {
       console.error('User ID is missing. Cannot proceed with checkout.');
